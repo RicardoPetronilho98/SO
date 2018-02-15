@@ -11,7 +11,7 @@
 
 
 //array de apontadores para funcoes 
-void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3};
+void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4};
 
 /* 
 	API para manipular ficheiros:
@@ -51,8 +51,8 @@ void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3};
 
 int main(int agrc, char **argv){	
 
-	//int exemplo = 3;
-	//arr[exemplo - 1]();
+	arr[3]();
+	//exe_3_1();
 	//exe_3_2(argv[1]);
 	//exe_3_3(10);
 	exe_3_5();
@@ -62,7 +62,7 @@ int main(int agrc, char **argv){
 
 void exemplo_1(){
 
-	//void *buf = malloc(...);
+	//char *buf = malloc(...);
 	char buf[64];
 	int n;
 
@@ -106,7 +106,7 @@ void exemplo_3(){
 	int N = 12;
 	char str[] = "Hello World!";
 
-	char *path = "/Users/ricardopetronilho/Desktop/SO/hello.txt";
+	char *path = "/Users/ricardopetronilho/Desktop/SO/str.txt";
 
 	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
@@ -114,6 +114,23 @@ void exemplo_3(){
 		write(f, str, N + 3);
 
 	exit(n);
+}
+
+
+void exemplo_4(){
+
+	int n;
+	int N = 4;
+	int a[] = {1, 2, 3, 4};
+
+	char *path = "/Users/ricardopetronilho/Desktop/SO/arrayA.txt";
+
+	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
+
+	for (n = 0; n < 1; n++)
+		write(f, a, N * 4);
+
+	//mexit(n);
 }
 
 

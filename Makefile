@@ -7,10 +7,12 @@ compile: clear
 clear: 
 	clear
 
+clean: 
+	rm hello.txt file.txt file2.txt guiao_1
+
 git:
 	git add * && git commit -m "auto-commit" && git push origin master
 
-clean:
-	rm hello.txt file.txt file2.txt
+
 
 

@@ -1,6 +1,7 @@
 void exemplo_1();
 void exemplo_2();
 void exemplo_3();
+void exemplo_4();
 void exe_3_1();
 void exe_3_2(char *path);
 void exe_3_3(int N);
