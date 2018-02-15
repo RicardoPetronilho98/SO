@@ -112,7 +112,7 @@ void exemplo_3(){
 	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
 	for (n = 0; n < 2; n++){
-		write(f, str, N * sizeof(char));
+		write(f, str, (N + 4) * sizeof(char));
 		if (n != 1) write(f, &c, sizeof(char));
 	}
 
@@ -125,6 +125,12 @@ void exemplo_4(){
 	int n;
 	int N = 4;
 	int a[] = {1, 2, 3, 4};
+
+	/* 
+		no ficheiro apareçe por exemplo o inteiro 1 da seguinte forma: 0100 0000
+		o que tem sentido pois nos barramentos de dados, cada "word" é enviada
+		"ao contrário" ou seja 0100 0000 na realidade é 0000 0001
+	*/
 
 	char *path = "/Users/ricardopetronilho/Desktop/SO/arrayA.txt";
 
