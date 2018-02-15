@@ -98,6 +98,7 @@ void exemplo_2(){ //cria um ficheiro file2.txt com 10 bytes do conteudo apontado
 						 mais bytes do que o tamanho do buffer??? 
 	*/
 
+	close(f);
 	free(buf);
 }
 
@@ -117,6 +118,7 @@ void exemplo_3(){ //cria o ficheiro hello.txt com texto
 		if (n != 1) write(f, &c, sizeof(char));
 	}
 
+	close(f);
 	//exit(n);
 }
 
@@ -140,6 +142,7 @@ void exemplo_4(){ //cria o ficheiro arrayA.txt com os inteiros apontados pelo ar
 	for (n = 0; n < 1; n++)
 		write(f, a, N * sizeof(int));
 
+	close(f);
 	//exit(n);
 }
 
@@ -159,6 +162,8 @@ void exemplo_5(){ //le o texto de um ficheiro.txt e imprime no terminal
 		perror("Erro ao ler ficheiro!");
 		exit(-1);
 	}
+
+	close(f);
 
 	// write(1, ..., ...) e equivalente ao printf (output)
 	write(1, buf, 12);
@@ -188,6 +193,7 @@ void exe_3_2(char *path){
 	for (n = 0; n < MEGA_10; n++)
 		write (f, &c, 1); // vai escrever no ficheiro apontado por f, caracter a caracter 
 
+	close(f);
 	exit(n);
 }
 
