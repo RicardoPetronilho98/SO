@@ -10,7 +10,7 @@ clear:
 clean: 
 	rm hello.txt file.txt file2.txt guiao_1 helloWorld.txt arrayA.txt
 
-git -i: git_commit
+git: git_commit
 	git push origin master
 
 git_commit: git_add
