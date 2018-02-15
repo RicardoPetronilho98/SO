@@ -10,4 +10,7 @@ clear:
 git:
 	git add * && git commit -m "auto-commit" && git push origin master
 
+clean:
+	rm hello.txt file.txt file2.txt
+
 

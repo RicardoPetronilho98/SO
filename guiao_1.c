@@ -3,18 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "guiao_1.h"
+
 //								1KB    1MB	  1MB
 #define MEGA_10					1024 * 1024 * 1
-#define ALLPERMISSIONS			0777
+#define ALL_OWNER_PERMI			S_IRUSR | S_IWUSR | S_IXUSR
 
-//Assinaturas/ prototipos das funcoes criadas neste ficheiro
-void exemplo_1();
-void exemplo_2();
-void exe_3_1();
-void exe_3_2(char *path);
 
 //array de apontadores para funcoes 
-void (*arr[])(void) = {exemplo_1, exemplo_2, exe_3_1};
+void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3};
 
 /* 
 	API para manipular ficheiros:
@@ -54,11 +51,11 @@ void (*arr[])(void) = {exemplo_1, exemplo_2, exe_3_1};
 
 int main(int agrc, char **argv){	
 
-	int exe = 1;
-
-	arr[exe]();
-
+	//int exemplo = 3;
+	//arr[exemplo - 1]();
 	//exe_3_2(argv[1]);
+	//exe_3_3(10);
+	exe_3_5();
 
 	return 0;
 }
@@ -78,11 +75,11 @@ void exemplo_1(){
 
 void exemplo_2(){
 
-	char *buf = malloc(sizeof(char) * 16);
 	int n;
+	char *buf = malloc(sizeof(char) * 16);
 	char *path = "/Users/ricardopetronilho/Desktop/SO/file2.txt";
 
-	int f = open(path, O_WRONLY | O_CREAT, ALLPERMISSIONS);
+	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
 	for (n = 0; n < 1; n++) 
 		write(f, buf, 10); 
@@ -96,10 +93,27 @@ void exemplo_2(){
 		o que faz sentido pois mandei escrever 1 vez -> 10 bytes
 		MAS...
 
-		-------> DUVIDA: pq escreve em HEXADECIMAL??? 
+		-------> DUVIDA: pq escreve em HEXADECIMAL quando se tenta escrever
+						 mais bytes do que o tamanho do buffer??? 
 	*/
 
 	free(buf);
+}
+
+void exemplo_3(){
+
+	int n;
+	int N = 12;
+	char str[] = "Hello World!";
+
+	char *path = "/Users/ricardopetronilho/Desktop/SO/hello.txt";
+
+	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
+
+	for (n = 0; n < 2; n++)
+		write(f, str, N + 3);
+
+	exit(n);
 }
 
 
@@ -120,7 +134,7 @@ void exe_3_2(char *path){
 	int n, f;
 
 	//the file descriptor is returned to the calling process
-	f = open(path, O_WRONLY | O_CREAT, ALLPERMISSIONS);
+	f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
 	for (n = 0; n < MEGA_10; n++)
 		write (f, &c, 1); // vai escrever no ficheiro apontado por f, caracter a caracter 
@@ -128,5 +142,21 @@ void exe_3_2(char *path){
 	exit(n);
 }
 
+void exe_3_3(int N){
 
+	//DUVIDA -----> NÃO FUNCIONA...
+
+	char buf[N];
+	int n;
+
+	while ( (n = read(0, buf, N)) > 0)
+		write(1, buf, N);
+
+	exit(n);
+}
+
+void exe_3_5(){
+
+
+}
 
