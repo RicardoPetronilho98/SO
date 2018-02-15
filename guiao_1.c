@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//					1KB    1MB	  10MB
-#define MEGA_10		1024 * 1024 * 10
+//								1KB    1MB	  1MB
+#define MEGA_10					1024 * 1024 * 1
+#define ALLPERMISSIONS			0777
 
 void exemplo_1();
 void exe_3_1();
@@ -84,7 +85,7 @@ void exe_3_2(char *path){
 	char c = 'a';
 	int n, f;
 
-	f = open(path, O_WRONLY | O_CREAT, S_IWRITE | S_IREAD);
+	f = open(path, O_WRONLY | O_CREAT, ALLPERMISSIONS);
 
 	for (n = 0; n < MEGA_10; n++)
 		write (f, &c, 1); // vai escrever no ficheiro apontado por f, caracter a caracter 
