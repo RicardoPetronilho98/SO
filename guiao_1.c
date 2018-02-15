@@ -11,7 +11,7 @@
 
 
 //array de apontadores para funcoes 
-void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4};
+void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5};
 
 /* 
 	API para manipular ficheiros:
@@ -51,16 +51,17 @@ void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4};
 
 int main(int agrc, char **argv){	
 
-	arr[2]();
+	int exemplo = 5;
+	arr[exemplo-1]();
 	//exe_3_1();
 	//exe_3_2(argv[1]);
 	//exe_3_3(10);
-	exe_3_5();
+	//exe_3_5();
 
 	return 0;
 }
 
-void exemplo_1(){
+void exemplo_1(){ //imprime um erro caso nao consiga ler caracters do ficheiro apontado por fd = 3
 
 	//char *buf = malloc(...);
 	char buf[64];
@@ -73,7 +74,7 @@ void exemplo_1(){
 	}
 }
 
-void exemplo_2(){
+void exemplo_2(){ //cria um ficheiro file2.txt com 10 bytes do conteudo apontado por buf
 
 	int n;
 	char *buf = malloc(sizeof(char) * 16);
@@ -100,7 +101,7 @@ void exemplo_2(){
 	free(buf);
 }
 
-void exemplo_3(){
+void exemplo_3(){ //cria o ficheiro hello.txt com texto 
 
 	int n, N;
 	char c = ' ';
@@ -112,7 +113,7 @@ void exemplo_3(){
 	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
 	for (n = 0; n < 2; n++){
-		write(f, str, (N + 4) * sizeof(char));
+		write(f, str, N * sizeof(char));
 		if (n != 1) write(f, &c, sizeof(char));
 	}
 
@@ -120,7 +121,7 @@ void exemplo_3(){
 }
 
 
-void exemplo_4(){
+void exemplo_4(){ //cria o ficheiro arrayA.txt com os inteiros apontados pelo array (a) em HEXADECIMAL 
 
 	int n;
 	int N = 4;
@@ -140,6 +141,28 @@ void exemplo_4(){
 		write(f, a, N * sizeof(int));
 
 	//exit(n);
+}
+
+void exemplo_5(){ //le o texto de um ficheiro.txt e imprime no terminal
+
+	exemplo_3(); //aqui cria o ficheiro helloWorld.txt
+
+	char c = '\n';
+	char *path = "/Users/ricardopetronilho/Desktop/SO/helloWorld.txt";
+	int n, f;
+	char *buf = malloc(sizeof(char) * 64); // 64 bytes 
+
+	f = open(path, O_RDONLY | O_CREAT, ALL_OWNER_PERMI);
+
+	if ( (n = read(f, buf, 64)) == -1){
+
+		perror("Erro ao ler ficheiro!");
+		exit(-1);
+	}
+
+	// write(1, ..., ...) e equivalente ao printf (output)
+	write(1, buf, 12);
+	write(1, &c, 1);
 }
 
 
