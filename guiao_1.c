@@ -11,6 +11,10 @@ void exemplo_1();
 void exe_3_1();
 void exe_3_2(char *path);
 
+//array de apontadores para funcoes 
+void (*arr[])(void) = {exemplo_1, exe_3_1};
+
+
 /* 
 	API para manipular ficheiros:
 
@@ -49,10 +53,8 @@ void exe_3_2(char *path);
 
 int main(int agrc, char **argv){	
 
-	//exemplo_1();	
-	//exe_3_1();
+	//arr[0]();
 	exe_3_2(argv[1]);
-
 	return 0;
 }
 
@@ -85,6 +87,7 @@ void exe_3_2(char *path){
 	char c = 'a';
 	int n, f;
 
+	//the file descriptor is returned to the calling process
 	f = open(path, O_WRONLY | O_CREAT, ALLPERMISSIONS);
 
 	for (n = 0; n < MEGA_10; n++)
