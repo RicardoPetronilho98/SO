@@ -7,13 +7,14 @@
 #define MEGA_10					1024 * 1024 * 1
 #define ALLPERMISSIONS			0777
 
+//Assinaturas/ prototipos das funcoes criadas neste ficheiro
 void exemplo_1();
+void exemplo_2();
 void exe_3_1();
 void exe_3_2(char *path);
 
 //array de apontadores para funcoes 
-void (*arr[])(void) = {exemplo_1, exe_3_1};
-
+void (*arr[])(void) = {exemplo_1, exemplo_2, exe_3_1};
 
 /* 
 	API para manipular ficheiros:
@@ -54,7 +55,9 @@ void (*arr[])(void) = {exemplo_1, exe_3_1};
 int main(int agrc, char **argv){	
 
 	//arr[0]();
-	exe_3_2(argv[1]);
+	arr[1]();
+	//arr[2]();
+	//exe_3_2(argv[1]);
 	return 0;
 }
 
@@ -70,6 +73,21 @@ void exemplo_1(){
 		exit(-1);
 	}
 }
+
+void exemplo_2(){
+
+	char buf[32];
+	int n;
+	char *path = "/Users/ricardopetronilho/Desktop/SO/file2.txt";
+
+	int f = open(path, O_WRONLY | O_CREAT, ALLPERMISSIONS);
+
+	for (n = 0; n < 1; n++)
+		write(f, buf, 10);
+
+	// DUVIDA: pq escreve em HEXADECIMAL??? (16 bits = 2 bytes)
+}
+
 
 void exe_3_1(){
 
