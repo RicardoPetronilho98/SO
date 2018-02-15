@@ -51,7 +51,7 @@ void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4};
 
 int main(int agrc, char **argv){	
 
-	arr[3]();
+	arr[2]();
 	//exe_3_1();
 	//exe_3_2(argv[1]);
 	//exe_3_3(10);
@@ -102,18 +102,21 @@ void exemplo_2(){
 
 void exemplo_3(){
 
-	int n;
-	int N = 12;
+	int n, N;
+	char c = ' ';
 	char str[] = "Hello World!";
+	for (N = 0; str[N]; N++);
 
-	char *path = "/Users/ricardopetronilho/Desktop/SO/str.txt";
+	char *path = "/Users/ricardopetronilho/Desktop/SO/helloWorld.txt";
 
 	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
-	for (n = 0; n < 2; n++)
-		write(f, str, N + 3);
+	for (n = 0; n < 2; n++){
+		write(f, str, N * sizeof(char));
+		if (n != 1) write(f, &c, sizeof(char));
+	}
 
-	exit(n);
+	//exit(n);
 }
 
 
@@ -128,9 +131,9 @@ void exemplo_4(){
 	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
 	for (n = 0; n < 1; n++)
-		write(f, a, N * 4);
+		write(f, a, N * sizeof(int));
 
-	//mexit(n);
+	//exit(n);
 }
 
 
@@ -167,7 +170,7 @@ void exe_3_3(int N){
 	int n;
 
 	while ( (n = read(0, buf, N)) > 0)
-		write(1, buf, N);
+		write(1, buf, N * sizeof(char));
 
 	exit(n);
 }
