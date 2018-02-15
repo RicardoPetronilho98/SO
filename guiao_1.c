@@ -49,17 +49,6 @@ void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5};
 	!g ---> india os comandos anteriores (no histórico) começados por g neste caso, ex: gcc -wall ...
 */
 
-int main(int agrc, char **argv){	
-
-	int exemplo = 5;
-	arr[exemplo-1]();
-	//exe_3_1();
-	//exe_3_2(argv[1]);
-	//exe_3_3(10);
-	//exe_3_5();
-
-	return 0;
-}
 
 void exemplo_1(){ //imprime um erro caso nao consiga ler caracters do ficheiro apontado por fd = 3
 
@@ -148,18 +137,30 @@ void exemplo_4(){ //cria o ficheiro arrayA.txt com os inteiros apontados pelo ar
 
 void exemplo_5(){ //le o texto de um ficheiro.txt e imprime no terminal
 
-	exemplo_3(); //aqui cria o ficheiro helloWorld.txt
+	int n, N;
+	char c = ' ';
+	char str[] = "Hello World!";
+	for (N = 0; str[N]; N++);
 
-	char c = '\n';
 	char *path = "/Users/ricardopetronilho/Desktop/SO/helloWorld.txt";
-	int n, f;
+
+	int f = open(path, O_RDWR | O_CREAT, ALL_OWNER_PERMI);
+
+	for (n = 0; n < 2; n++){
+		write(f, str, N * sizeof(char));
+		if (n != 1) write(f, &c, sizeof(char));
+	}
+
+	// aqui temos o ficheiro helloWorld.txt com texto contido
+
+	char g = '\n';
 	char *buf = malloc(sizeof(char) * 64); // 64 bytes 
 
-	f = open(path, O_RDONLY | O_CREAT, ALL_OWNER_PERMI);
+	lseek(f, 0, SEEK_SET);
 
 	if ( (n = read(f, buf, 64)) == -1){
 
-		perror("Erro ao ler ficheiro!");
+		perror("Erro ao ler ficheiro");
 		exit(-1);
 	}
 
@@ -167,7 +168,7 @@ void exemplo_5(){ //le o texto de um ficheiro.txt e imprime no terminal
 
 	// write(1, ..., ...) e equivalente ao printf (output)
 	write(1, buf, 12);
-	write(1, &c, 1);
+	write(1, &g, 1);
 }
 
 
@@ -176,10 +177,14 @@ void exe_3_1(){
 	char c;
 	int n;
 
-	while ( (n = read(0, &c, 1)) > 0) 
-		write (1, &c, 1); //ai!!! devia ver se deu erro
+	while ( (n = read(0, &c, 1)) > 0) //ciclo infinito que apenas termina com o CTRL+D
+		write (1, &c, 1);
 
-	exit(n);
+	if (n <= 0){
+
+		perror("Não foram lidos caracteres");
+		exit(n);
+	}
 }
 
 void exe_3_2(char *path){
@@ -187,7 +192,7 @@ void exe_3_2(char *path){
 	char c = 'a';
 	int n, f;
 
-	//the file descriptor is returned to the calling process
+	//f é o file descriptor
 	f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
 	for (n = 0; n < MEGA_10; n++)
@@ -197,9 +202,13 @@ void exe_3_2(char *path){
 	exit(n);
 }
 
-void exe_3_3(int N){
+void exe_3_3(int N){ 
 
-	//DUVIDA -----> NÃO FUNCIONA...
+	/* 
+		nota: '\n' (ENTER) conta como caracter ou seja, ao introduzir por exemplo 
+		      ppp e carregar ENTER de seguida, na realidade estamos a introduzir
+		      4 caracteres ---> ppp'\n'
+	*/
 
 	char buf[N];
 	int n;
@@ -213,5 +222,32 @@ void exe_3_3(int N){
 void exe_3_5(){
 
 
+}
+
+
+int main(int agrc, char **argv){	
+
+	int alinea = 0; 
+	int exemplo = 5;
+
+	switch(alinea){
+
+		case 1:
+			exe_3_1();
+			break;
+
+		case 2:
+			exe_3_2(argv[1]);
+			break;
+
+		case 3:
+			exe_3_3(4);
+			break;
+
+		default:
+			arr[exemplo-1]();
+	}
+	
+	return 0;
 }
 
