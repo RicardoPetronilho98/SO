@@ -54,10 +54,12 @@ void (*arr[])(void) = {exemplo_1, exemplo_2, exe_3_1};
 
 int main(int agrc, char **argv){	
 
-	//arr[0]();
-	arr[1]();
-	//arr[2]();
+	int exe = 1;
+
+	arr[exe]();
+
 	//exe_3_2(argv[1]);
+
 	return 0;
 }
 
@@ -76,16 +78,28 @@ void exemplo_1(){
 
 void exemplo_2(){
 
-	char buf[32];
+	char *buf = malloc(sizeof(char) * 16);
 	int n;
 	char *path = "/Users/ricardopetronilho/Desktop/SO/file2.txt";
 
 	int f = open(path, O_WRONLY | O_CREAT, ALLPERMISSIONS);
 
-	for (n = 0; n < 1; n++)
-		write(f, buf, 10);
+	for (n = 0; n < 1; n++) 
+		write(f, buf, 10); 
+		//significa ---> escreve no ficheiro apontado por f, 10 bytes do que esta apontado por buf
 
-	// DUVIDA: pq escreve em HEXADECIMAL??? (16 bits = 2 bytes)
+	/* 
+		neste caso foi escrito 5 blocos de HEXADECIMAL
+		1 HEXADECIMAL == 16 bits (0-15) == 2 bytes
+		5 HEXADECIMAL == 10 bytes
+		
+		o que faz sentido pois mandei escrever 1 vez -> 10 bytes
+		MAS...
+
+		-------> DUVIDA: pq escreve em HEXADECIMAL??? 
+	*/
+
+	free(buf);
 }
 
 
