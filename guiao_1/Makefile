@@ -10,8 +10,15 @@ clear:
 clean: 
 	rm hello.txt file.txt file2.txt guiao_1 helloWorld.txt arrayA.txt
 
-git:
-	git add guiao_1.c guiao_1.h Makefile .gitignore && git commit -m "auto-commit" && git push origin master
+git -i: git_commit
+	git push origin master
+
+git_commit: git_add
+	git commit -m "auto-commit"
+
+git_add: 
+	git add *
+
 
 
 
