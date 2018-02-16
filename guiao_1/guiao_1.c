@@ -221,24 +221,10 @@ void exe_3_3(int N){
 
 void exe_3_5(){
 
-	void *buf = malloc(sizeof(char));
-	int N = sizeof(char) * 10; //10 bytes
-	
-	ssize_t n = readln(0, buf, N);
-
-	for (N = 0; N < n; n++)
-		write(1, buf, 1);
 }
 
 ssize_t readln(int fildes, void *buf, size_t nbyte){
 
-	char c;
-	ssize_t n = 0;
-	buf = &c;
-
-	while (read(fildes, &c, 1) > 0 && c != '\n' && n < nbyte) n++;
-
-	return n;
 }
 
 
