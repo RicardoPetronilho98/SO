@@ -275,7 +275,7 @@ void exe_4_1(int agrc, char **argv){
 
 		f = open(argv[i], O_RDONLY, ALL_PERMI);
 
-		if ( (n = read(f, buf, buffSize)) == -1){
+		if ( (n = read(f, buf, buffSize)) == -1){ // le o conteudo do ficheiro
 
 			perror("Erro ao ler ficheiro");
 			exit(-1);
@@ -283,9 +283,9 @@ void exe_4_1(int agrc, char **argv){
 
 		close(f);
 
-		write(1, buf, n);
+		write(1, buf, n); // escreve o conteudo do ficheiro no terminal
 
-		write(1, &c, 1);
+		write(1, &c, 1); // new line entre cada ficehiro
 	}
 }
 
