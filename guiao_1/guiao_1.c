@@ -8,6 +8,8 @@
 //								1KB    1MB	  1MB
 #define MEGA_10					1024 * 1024 * 1
 #define ALL_OWNER_PERMI			S_IRUSR | S_IWUSR | S_IXUSR
+#define ALL_PERMI				0777
+
 
 
 //array de apontadores para funcoes 
@@ -262,34 +264,83 @@ ssize_t readln(int fildes, void *buf, size_t nbyte){
 }
 
 
+void exe_4_1(int agrc, char **argv){
+
+	int i, f, n;
+	int buffSize = 1024 * sizeof(char); //  1024 bytes = 1 MB
+	char *buf = malloc(buffSize);
+	char c = '\n';
+	
+	for (i = 1; i < agrc; i++){
+
+		f = open(argv[i], O_RDONLY, ALL_PERMI);
+
+		if ( (n = read(f, buf, buffSize)) == -1){
+
+			perror("Erro ao ler ficheiro");
+			exit(-1);
+		}
+
+		close(f);
+
+		write(1, buf, n);
+
+		write(1, &c, 1);
+	}
+}
+
 
 int main(int agrc, char **argv){	
 
-	int alinea = 5; 
-	int exemplo = -1;
-
-	switch(alinea){
-
-		case 1:
-			exe_3_1();
-			break;
-
-		case 2:
-			exe_3_2(argv[1]);
-			break;
-
-		case 3:
-			exe_3_3(4);
-			break;
-
-		case 5:
-			exe_3_5();
-			break;
-
-		default:
-			arr[exemplo-1]();
-	}
+	int exe = 4;
+	int alinea = 1; 
 	
+	int exemplo = 6;
+
+	if (exe == 3){
+
+		switch(alinea){
+
+			case 1:
+				exe_3_1();
+				break;
+
+			case 2:
+				exe_3_2(argv[1]);
+				break;
+
+			case 3:
+				exe_3_3(4);
+				break;
+
+			case 5:
+				exe_3_5();
+				break;
+
+			default:
+				perror("nao existe essa alinea");
+				exit(-1);
+		}	
+
+	}
+
+	else if (exe == 4){
+
+		switch(alinea){
+
+			case 1:
+				exe_4_1(agrc, argv);
+				break;
+
+			default:
+				perror("nao existe essa alinea");
+				exit(-1);
+		}	
+
+	}
+
+	else arr[exemplo - 1]();
+
 	return 0;
 }
 
