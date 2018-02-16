@@ -67,7 +67,7 @@ void exemplo_2(){ //cria um ficheiro file2.txt com 10 bytes do conteudo apontado
 
 	int n;
 	char *buf = malloc(sizeof(char) * 16);
-	char *path = "/Users/ricardopetronilho/Desktop/SO/file2.txt";
+	char *path = "/Users/ricardopetronilho/Desktop/SO/guiao_1/file2.txt";
 
 	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
@@ -98,7 +98,7 @@ void exemplo_3(){ //cria o ficheiro hello.txt com texto
 	char str[] = "Hello World!";
 	for (N = 0; str[N]; N++);
 
-	char *path = "/Users/ricardopetronilho/Desktop/SO/helloWorld.txt";
+	char *path = "/Users/ricardopetronilho/Desktop/SO/guiao_1/helloWorld.txt";
 
 	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
@@ -124,7 +124,7 @@ void exemplo_4(){ //cria o ficheiro arrayA.txt com os inteiros apontados pelo ar
 		"ao contrário" ou seja 0100 0000 na realidade é 0000 0001
 	*/
 
-	char *path = "/Users/ricardopetronilho/Desktop/SO/arrayA.txt";
+	char *path = "/Users/ricardopetronilho/Desktop/SO/guiao_1/arrayA.txt";
 
 	int f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
@@ -142,7 +142,7 @@ void exemplo_5(){ //le o texto de um ficheiro.txt e imprime no terminal
 	char str[] = "Hello World!";
 	for (N = 0; str[N]; N++);
 
-	char *path = "/Users/ricardopetronilho/Desktop/SO/helloWorld.txt";
+	char *path = "/Users/ricardopetronilho/Desktop/SO/guiao_1/helloWorld.txt";
 
 	int f = open(path, O_RDWR | O_CREAT, ALL_OWNER_PERMI);
 
@@ -221,13 +221,31 @@ void exe_3_3(int N){
 
 void exe_3_5(){
 
+	void *buf = malloc(sizeof(char));
+	int N = sizeof(char) * 10; //10 bytes
+	
+	ssize_t n = readln(0, buf, N);
 
+	for (N = 0; N < n; n++)
+		write(1, buf, 1);
 }
+
+ssize_t readln(int fildes, void *buf, size_t nbyte){
+
+	char c;
+	ssize_t n = 0;
+	buf = &c;
+
+	while (read(fildes, &c, 1) > 0 && c != '\n' && n < nbyte) n++;
+
+	return n;
+}
+
 
 
 int main(int agrc, char **argv){	
 
-	int alinea = 0; 
+	int alinea = 5; 
 	int exemplo = 5;
 
 	switch(alinea){
@@ -242,6 +260,10 @@ int main(int agrc, char **argv){
 
 		case 3:
 			exe_3_3(4);
+			break;
+
+		case 5:
+			exe_3_5();
 			break;
 
 		default:
