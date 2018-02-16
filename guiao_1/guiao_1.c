@@ -11,7 +11,7 @@
 
 
 //array de apontadores para funcoes 
-void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5};
+void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5, exemplo_6};
 
 /* 
 	API para manipular ficheiros:
@@ -171,6 +171,18 @@ void exemplo_5(){ //le o texto de um ficheiro.txt e imprime no terminal
 	write(1, &g, 1);
 }
 
+void exemplo_6(){ //imprime um erro caso nao consiga ler caracters do ficheiro apontado por fd = 3
+
+	char c;
+	int n;
+
+	char *path = "/Users/ricardopetronilho/Desktop/SO/guiao_1/file3.txt";
+
+	int f = open(path, O_RDWR | O_CREAT, ALL_OWNER_PERMI);
+
+	while ( (n = read(0, &c, 1)) > 0) //ciclo infinito que apenas termina com o CTRL+D
+		write (f, &c, 1);
+}
 
 void exe_3_1(){
 
@@ -179,12 +191,6 @@ void exe_3_1(){
 
 	while ( (n = read(0, &c, 1)) > 0) //ciclo infinito que apenas termina com o CTRL+D
 		write (1, &c, 1);
-
-	if (n <= 0){
-
-		perror("Não foram lidos caracteres");
-		exit(n);
-	}
 }
 
 void exe_3_2(char *path){
@@ -219,12 +225,40 @@ void exe_3_3(int N){
 	exit(n);
 }
 
-void exe_3_5(){
+void exe_3_5(){	
 
+	ssize_t n;
+	
+	int N = sizeof(char) * 64; // reservar 64 bytes para o buffer
+	char *buf = malloc(N); // criar o buffer com os 64 bytes
+
+	n = readln(0, buf, N); // le uma linha do terminal e retorna o tamanho
+
+	write(1, buf, n); // escreve essa mesma linha para testar se esta correto
 }
 
+
+/*
+	readln - read from stdin until newline or EOF, or buffer is full.
+	Flush to newline or EOF and return on full buffer. Returns data length.
+*/
+	
 ssize_t readln(int fildes, void *buf, size_t nbyte){
 
+	char *bp = (char *) buf, c;
+	int	n;
+
+	while(bp - (char *) buf < nbyte && (n = read(0, bp, 1)) > 0)
+		if (*bp++ == '\n')
+			return (bp - (char *) buf);
+
+	if (n < 0)
+		return -1;
+
+	if (bp - (char *) buf == nbyte)
+		while (read(0, &c, 1) > 0 && c != '\n');
+
+	return (bp - (char *) buf);
 }
 
 
@@ -232,7 +266,7 @@ ssize_t readln(int fildes, void *buf, size_t nbyte){
 int main(int agrc, char **argv){	
 
 	int alinea = 5; 
-	int exemplo = 5;
+	int exemplo = -1;
 
 	switch(alinea){
 

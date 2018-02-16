@@ -8,7 +8,7 @@ clear:
 	clear
 
 clean: 
-	rm hello.txt file.txt file2.txt guiao_1 helloWorld.txt arrayA.txt
+	rm hello.txt file.txt file2.txt file3.txt guiao_1 helloWorld.txt arrayA.txt
 
 git: git_commit
 	git push origin master
