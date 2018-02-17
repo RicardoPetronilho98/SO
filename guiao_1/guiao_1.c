@@ -301,6 +301,7 @@ void exe_3_6(char **argv){
 	char num_1[13]; // string que contem o numero da linha
 	char num_2[13]; // string que contem o numero da linha repetida
 	int dim; // dimensao da string
+	int bugFix;
 	
 	int N = 1024; // reservar 1 MB para o buffer
 	char *buf = malloc(N); // criar o buffer com os 64 bytes
@@ -317,22 +318,34 @@ void exe_3_6(char **argv){
 
 		sprintf(num_1, "%d ", linha); // coloca o nº da linha numa string
 		for (dim = 0; num_1[dim]; dim++); // determina a dimensao dessa string
-		write(1, num_1, dim * sizeof(char)); //escreve essa string no terminal
-		write(1, buf, n); // escreve a linha do ficheiro no terminal
-		
-		if ( strcmp(buf, bufAnt) == 0 ){ // caso haja linhas repetidas, faz a numeração
 
+		if ( strcmp(buf, bufAnt) == 0 || bugFix == 1){ // caso haja linhas repetidas, faz a numeração
+
+			if (bugFix == 1) bugFix = 0;
+			
 			sprintf(num_2, " %d", linha_2); // coloca o nº da linha numa string
 			for (dim = 0; num_2[dim]; dim++); // determina a dimensao dessa string
 			write(1, num_2, dim * sizeof(char)); //escreve essa string no terminal
 			linha_2++;
+			write(1, &newLine, 1);
+			write(1, num_1, dim * sizeof(char)); //escreve essa string no terminal
+			write(1, buf, n); // escreve a linha do ficheiro no terminal
+			
+			if (strcmp(buf, bufAnt) == 0) bugFix = 1;
 
-		} else linha_2 = 1;
+		} else{
+			
+			linha_2 = 1;
+			if (linha != 1) write(1, &newLine, 1);
+			write(1, num_1, dim * sizeof(char)); //escreve essa string no terminal
+			write(1, buf, n); // escreve a linha do ficheiro no terminal
+		}
 
-		write(1, &newLine, 1);
 		linha++;
 		strcpy(bufAnt, buf);
 	}
+
+	write(1, &newLine, 1);
 }
 
 void exe_4_1(int agrc, char **argv){
