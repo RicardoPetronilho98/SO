@@ -2,6 +2,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 #include "guiao_1.h"
 
@@ -9,8 +11,6 @@
 #define MEGA_10					1024 * 1024 * 1
 #define ALL_OWNER_PERMI			S_IRUSR | S_IWUSR | S_IXUSR
 #define ALL_PERMI				0777
-
-
 
 //array de apontadores para funcoes 
 void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5, exemplo_6};
@@ -195,13 +195,13 @@ void exe_3_1(){
 		write (1, &c, 1);
 }
 
-void exe_3_2(char *path){
+void exe_3_2(char **argv){
 
 	char c = 'a';
 	int n, f;
 
 	//f é o file descriptor
-	f = open(path, O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
+	f = open(argv[1], O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
 	for (n = 0; n < MEGA_10; n++)
 		write (f, &c, 1); // vai escrever no ficheiro apontado por f, caracter a caracter 
@@ -210,21 +210,41 @@ void exe_3_2(char *path){
 	exit(n);
 }
 
-void exe_3_3(int N){ 
+int convertStringToInt(char *str){
+
+	int n = 0;
+	int i;
+
+	int dim = strlen(str);
+
+	for (i = dim - 1; i >= 0; i--) 
+		n += (str[dim - i - 1] - '0') * pow (10, i);
+
+	return n;
+}
+
+void exe_3_3(char **argv){ 
 
 	/* 
-		nota: '\n' (ENTER) conta como caracter ou seja, ao introduzir por exemplo 
-		      ppp e carregar ENTER de seguida, na realidade estamos a introduzir
-		      4 caracteres ---> ppp'\n'
+		nota: (ENTER) conta como caracter ou seja, ao introduzir por exemplo 
+		      ppp e carregar (ENTER) de seguida, na realidade estamos a introduzir
+		      4 caracteres ---> ppp(ENTER)
 	*/
 
+	int N = convertStringToInt(argv[1]);
 	char buf[N];
 	int n;
 
-	while ( (n = read(0, buf, N)) > 0)
+	while ( (n = read(0, buf, N * sizeof(char))) > 0)
 		write(1, buf, N * sizeof(char));
 
 	exit(n);
+}
+
+
+void exe_3_4(char **argv){
+
+	exe_3_3(argv);
 }
 
 void exe_3_5(){	
@@ -232,35 +252,27 @@ void exe_3_5(){
 	ssize_t n;
 	
 	int N = sizeof(char) * 64; // reservar 64 bytes para o buffer
-	char *buf = malloc(N); // criar o buffer com os 64 bytes
+	int *buf = malloc(N); // criar o buffer com os 64 bytes
 
 	n = readln(0, buf, N); // le uma linha do terminal e retorna o tamanho
 
-	write(1, buf, n); // escreve essa mesma linha para testar se esta correto
+	write(1, buf, n + 1); // escreve essa mesma linha para testar se esta correto
 }
 
-
-/*
-	readln - read from stdin until newline or EOF, or buffer is full.
-	Flush to newline or EOF and return on full buffer. Returns data length.
-*/
-	
 ssize_t readln(int fildes, void *buf, size_t nbyte){
 
-	char *bp = (char *) buf, c;
-	int	n;
+	// copyright: José Pereira
 
-	while(bp - (char *) buf < nbyte && (n = read(0, bp, 1)) > 0)
-		if (*bp++ == '\n')
-			return (bp - (char *) buf);
+	int n, mi = 0;
 
-	if (n < 0)
-		return -1;
+	while(i < nbyte){
 
-	if (bp - (char *) buf == nbyte)
-		while (read(0, &c, 1) > 0 && c != '\n');
+		n = read(0, (char *) buf + i, sizeof(char));
+		if ( *((char *) buf + i) == '\n') break;
+		i++;
+	}
 
-	return (bp - (char *) buf);
+	return i;
 }
 
 
@@ -289,12 +301,36 @@ void exe_4_1(int agrc, char **argv){
 	}
 }
 
+void exe_4_6(char **argv){
+
+	int f1, f2, n1, n2;
+	char c1, c2;
+	char buf1[] = "True"; 
+	char buf2[] = "False"; 
+	//char newLine = '\n';
+	int count = 0;
+
+	f1 = open(argv[1], O_RDONLY, ALL_PERMI);
+	f2 = open(argv[2], O_RDONLY, ALL_PERMI);
+
+	while ( (n1 = read(f1, &c1, 1)) == -1 
+		 && (n2 = read(f2, &c2, 1)) == -1 
+		 && c1 == c2 ) count++;
+
+	if (c1 == c2) write(1, buf1, 4);
+	else write(1, buf2, 5);
+
+	printf("\n%d\n", count);
+
+	//write(1, &newLine, 1);
+}
+
 
 int main(int agrc, char **argv){	
 
-	int exe = 4;
-	int alinea = 1; 
-	
+	int exe = 3;
+	int alinea = 5; 
+
 	int exemplo = 6;
 
 	if (exe == 3){
@@ -306,11 +342,15 @@ int main(int agrc, char **argv){
 				break;
 
 			case 2:
-				exe_3_2(argv[1]);
+				exe_3_2(argv);
 				break;
 
 			case 3:
-				exe_3_3(4);
+				exe_3_3(argv);
+				break;
+
+			case 4:
+				exe_3_4(argv);
 				break;
 
 			case 5:
@@ -330,6 +370,10 @@ int main(int agrc, char **argv){
 
 			case 1:
 				exe_4_1(agrc, argv);
+				break;
+
+			case 6:
+				exe_4_6(argv);
 				break;
 
 			default:
