@@ -195,6 +195,17 @@ void exe_3_1(){
 		write (1, &c, 1);
 }
 
+void exe_3_1_v2(){
+
+	char c;
+	int n = 1;
+
+	while (n > 0){
+		n = read(0, &c, 1);
+		write (1, &c, 1);
+	}
+}
+
 void exe_3_2(char **argv){
 
 	char c = 'a';
@@ -251,7 +262,7 @@ void exe_3_5(){
 
 	ssize_t n;
 	
-	int N = sizeof(char) * 64; // reservar 64 bytes para o buffer
+	int N = 10; // reservar 64 bytes para o buffer
 	int *buf = malloc(N); // criar o buffer com os 64 bytes
 
 	n = readln(0, buf, N); // le uma linha do terminal e retorna o tamanho
@@ -263,13 +274,18 @@ ssize_t readln(int fildes, void *buf, size_t nbyte){
 
 	// copyright: José Pereira
 
-	int n, mi = 0;
+	int n, i = 0;
 
 	while(i < nbyte){
 
 		n = read(0, (char *) buf + i, sizeof(char));
 		if ( *((char *) buf + i) == '\n') break;
 		i++;
+	}
+
+	if (i == nbyte){
+		perror("Memoria reservada para o buffer insuficiente");
+		exit(-1);
 	}
 
 	return i;
@@ -329,7 +345,7 @@ void exe_4_6(char **argv){
 int main(int agrc, char **argv){	
 
 	int exe = 3;
-	int alinea = 5; 
+	int alinea = 1; 
 
 	int exemplo = 6;
 
@@ -339,6 +355,7 @@ int main(int agrc, char **argv){
 
 			case 1:
 				exe_3_1();
+				//exe_3_1_v2();
 				break;
 
 			case 2:
