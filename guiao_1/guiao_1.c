@@ -5,9 +5,9 @@
 #include <string.h>
 #include <math.h>
 
-#include "defines.h"
-#include "assinaturas.h"
-#include "exemplos.h"
+#include "includes/defines.h"
+#include "includes/assinaturas.h"
+#include "includes/exemplos.h"
 
 
 
