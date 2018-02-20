@@ -199,7 +199,7 @@ void exe_3_6(int argc, const char **argv){
             
             fixLastLinha_2 = 1;
             
-            loop:
+            loop: //isto aqui foi so para nao escrever 2 vezes coisas muito semelhantes...
                 sprintf(num, " %d", linha_2); // coloca o nº da linha_2 numa string
                 for (len = 0; num[len]; len++); // determina a dimensao dessa string
                 write(1, num, len * sizeof(char)); //escreve essa string (nº da linha_2) no terminal
