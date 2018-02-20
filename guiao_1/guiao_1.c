@@ -192,7 +192,6 @@ void exe_3_6(int argc, char **argv){
 		else{
 			
 			if (lastLinha_2fix) imprimeLinha(&linha_2, num, initFix, 2);
-
 			if (!initFix) write(1, &newLine, 1);
 			linha_2 = 1;
 			lastLinha_2fix = 0;	
