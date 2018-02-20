@@ -1,3 +1,13 @@
+#ifndef ASSINATURAS_H
+#define ASSINATURAS_H
+
+typedef struct buffer_t{
+
+	void *buf;
+	int field;
+
+} *p_buffer_t;
+
 void exemplo_1();
 void exemplo_2();
 void exemplo_3();
@@ -18,3 +28,9 @@ void exe_4_6(const char **argv);
 ssize_t readln(int fildes, void *buf, size_t nbyte);
 int convertStringToInt(const char *str);
 void imprimeLinha(int *linha_2, int initFix, int v);
+
+int create_buffer(int filedes, struct buffer_t *buffer, size_t nbyte);
+int destroy_buffer(struct buffer_t *buffer);
+ssize_t readln_2(struct buffer_t *bufer, void **buf);
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef EXEMPLOS_H
+#define EXEMPLOS_H
+
 void exemplo_1(){ //imprime um erro caso nao consiga ler caracters do ficheiro apontado por fd = 3
 
 	//char *buf = malloc(...);
@@ -131,3 +134,5 @@ void exemplo_6(){ //imprime um erro caso nao consiga ler caracters do ficheiro a
 	while ( (n = read(0, &c, 1)) > 0) //ciclo infinito que apenas termina com o CTRL+D
 		write (f, &c, 1);
 }
+
+#endif

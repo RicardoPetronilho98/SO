@@ -9,7 +9,7 @@
 #include "includes/assinaturas.h"
 #include "includes/exemplos.h"
 
-#define NUM_SIZE 	13
+#define NUM_SIZE 			 	  13
 
 
 
@@ -174,6 +174,7 @@ void exe_3_6(int argc, const char **argv){
     char *bufNext = malloc(N);
     char *num = malloc(NUM_SIZE * sizeof(char)); // string que contem o numero da linha
     char newLine = '\n';
+    char tab = 9;
     
     if (argc <= 1) field = 0;
     else if ( (field = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){ //ler do ficheiro
@@ -181,7 +182,8 @@ void exe_3_6(int argc, const char **argv){
         exit(-1);
     }
     
-    n1 = readln(field, buf, N);
+    if (field > 1) n1 = readln(field, buf, N);
+    else n1 = 1;
     
     while(n1){ //o que interessa é que o n1 (dimensão do buf) contenha informação para escrita
         
@@ -189,6 +191,7 @@ void exe_3_6(int argc, const char **argv){
         
         sprintf(num, "%d ", linha_1); // coloca o nº da linha_1 numa string
         for (len = 0; num[len]; len++); // determina a dimensao dessa string
+        write(1, &tab, sizeof(char));
         write(1, num, len * sizeof(char)); //escreve essa string (nº da linha_1) no terminal
         write(1, buf, n1);
         
@@ -220,6 +223,33 @@ void exe_3_6(int argc, const char **argv){
     free(num);
     free(buf);
     free(bufNext);
+}
+
+int create_buffer(int filedes, struct buffer_t *buffer, size_t nbyte){
+
+	p_buffer_t buf = malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
+	
+	if (buf == NULL){
+		perror("could not allocate buffer_t memory");
+		exit(20);
+	}
+
+	buf->buf = malloc ( nbyte * sizeof(char) );
+	buf->field = filedes;
+
+	return 0;
+}
+
+int destroy_buffer(struct buffer_t *buffer){
+
+	free(buffer);
+
+	return 0;
+}
+
+ssize_t readln_2(struct buffer_t *bufer, void **buf){
+
+	return 0;
 }
 
 
