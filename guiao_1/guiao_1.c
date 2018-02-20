@@ -157,57 +157,78 @@ void exe_3_5(){
 	write(1, buf, n + 1); // escreve essa mesma linha para testar se esta correto
 }
 
-void exe_3_6(char **argv){
+void exe_3_6(int argc, char **argv){
 
 	ssize_t n;
-	char newLine = '\n';
+	int field;
 	int linha = 1; // nº da linha
 	int linha_2 = 1;
-	char num_1[13]; // string que contem o numero da linha
-	char num_2[13]; // string que contem o numero da linha repetida
-	int dim; // dimensao da string
-	int bugFix;
+	char num[13]; // string que contem o numero da linha
+	int len; // dimensao da string
+	int initFix = 1;
+	int lastLinha_2fix = 0;
 	
 	int N = 1024; // reservar 1 MB para o buffer
-	char *buf = malloc(N); // criar o buffer com os 64 bytes
-	char *bufAnt = malloc(N); 
-	
-	int f = open(argv[1], O_RDONLY, ALL_PERMI);
+	char *bufAnt2 = malloc(N);
+	char *bufAnt = malloc(N); // criar o buffer com os 1MB
+	char *bufAtual = malloc(N);
+	char newLine = '\n';
 
-	if (f == -1){
+	if (argc <= 1) field = 0;  
+	else field = open(argv[1], O_RDONLY, ALL_PERMI);
+
+	if (field == -1){
 		perror("erro ao ler ficheiro");
 		exit(-1);
 	}
 
-	while( (n = readln(f, buf, N)) > 0){
+	while( (n = readln(field, bufAtual, N)) > 0){
 
-		sprintf(num_1, "%d ", linha); // coloca o nº da linha numa string
-		for (dim = 0; num_1[dim]; dim++); // determina a dimensao dessa string
+		if (strcmp(bufAtual, bufAnt) == 0){ 
 
-		if ( strcmp(buf, bufAnt) == 0 || bugFix == 1){ // caso haja linhas repetidas, faz a numeração
+			//caso seja igual ao anterior imprime a linha_2
 
-			if (bugFix == 1) bugFix = 0;
-			
-			sprintf(num_2, " %d", linha_2); // coloca o nº da linha numa string
-			for (dim = 0; num_2[dim]; dim++); // determina a dimensao dessa string
-			write(1, num_2, dim * sizeof(char)); //escreve essa string no terminal
-			linha_2++;
+			sprintf(num, " %d ", linha_2); // coloca o nº da linha numa string
+			for (len = 0; num[len]; len++); // determina a dimensao dessa string
+			write(1, num, len * sizeof(char)); //escreve essa string no terminal
 			write(1, &newLine, 1);
-			write(1, num_1, dim * sizeof(char)); //escreve essa string no terminal
-			write(1, buf, n); // escreve a linha do ficheiro no terminal
-			
-			if (strcmp(buf, bufAnt) == 0) bugFix = 1;
-
-		} else{
-			
-			linha_2 = 1;
-			if (linha != 1) write(1, &newLine, 1);
-			write(1, num_1, dim * sizeof(char)); //escreve essa string no terminal
-			write(1, buf, n); // escreve a linha do ficheiro no terminal
+			linha_2++;
+			lastLinha_2fix = 1;
 		}
 
+		else{
+	
+			
+			if (lastLinha_2fix){
+				
+				sprintf(num, " %d ", linha_2); // coloca o nº da linha numa string
+				for (len = 0; num[len]; len++); // determina a dimensao dessa string
+				write(1, num, len * sizeof(char)); //escreve essa string no terminal
+			}
+
+			if (!initFix) write(1, &newLine, 1);
+			
+			linha_2 = 1;
+			lastLinha_2fix = 0;	
+		}
+
+		sprintf(num, "%d ", linha); // coloca o nº da linha numa string
+		for (len = 0; num[len]; len++); // determina a dimensao dessa string
+		write(1, num, len * sizeof(char)); //escreve essa string no terminal
+		write(1, bufAtual, n); // escreve a linha do ficheiro no terminal
 		linha++;
-		strcpy(bufAnt, buf);
+		initFix = 0;
+
+		strcpy(bufAnt2, bufAnt);
+		strcpy(bufAnt, bufAtual);
+	}
+
+	if (strcmp(bufAnt2, bufAnt) == 0){ //buf Fix (caso houvesse repetição na ultima linha) 
+
+		sprintf(num, " %d ", linha_2); // coloca o nº da linha numa string
+		for (len = 0; num[len]; len++); // determina a dimensao dessa string
+		write(1, num, len * sizeof(char)); //escreve essa string no terminal
+
 	}
 
 	write(1, &newLine, 1);
@@ -263,7 +284,7 @@ void exe_4_6(char **argv){
 }
 
 
-int main(int agrc, char **argv){	
+int main(int argc, char **argv){	
 
 	int exe = 3;
 	int alinea = 6; 
@@ -296,7 +317,7 @@ int main(int agrc, char **argv){
 				break;
 
 			case 6:
-				exe_3_6(argv);
+				exe_3_6(argc, argv);
 				break;
 
 			default:
@@ -311,7 +332,7 @@ int main(int agrc, char **argv){
 		switch(alinea){
 
 			case 1:
-				exe_4_1(agrc, argv);
+				exe_4_1(argc, argv);
 				break;
 
 			case 6:
