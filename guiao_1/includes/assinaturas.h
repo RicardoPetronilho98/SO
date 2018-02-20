@@ -17,4 +17,4 @@ void exe_4_6(char **argv);
 
 ssize_t readln(int fildes, void *buf, size_t nbyte);
 int convertStringToInt(char *str);
-void imprimeLinha(int *linha_2, char* num, int initFix, int v);
+void imprimeLinha(int *linha_2, int initFix, int v);

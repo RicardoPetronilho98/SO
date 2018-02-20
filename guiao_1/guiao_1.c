@@ -9,6 +9,8 @@
 #include "includes/assinaturas.h"
 #include "includes/exemplos.h"
 
+#define NUM_SIZE 	13
+
 
 
 //array de apontadores para funcoes 
@@ -166,7 +168,6 @@ void exe_3_6(int argc, char **argv){
 	int linha_2 = 1;
 	int initFix = 1;
 	int lastLinha_2fix = 0;
-	char num[13]; // string que contem o numero da linha
 	char newLine = '\n';
 	char *bufAnt2 = malloc(N);
 	char *bufAnt = malloc(N); // criar o buffer com os 1MB
@@ -184,20 +185,20 @@ void exe_3_6(int argc, char **argv){
 
 		if (strcmp(bufAtual, bufAnt) == 0){ //caso seja igual ao anterior imprime a linha_2
 
-			imprimeLinha(&linha_2, num, initFix, 2);
+			imprimeLinha(&linha_2, initFix, 2);
 			write(1, &newLine, 1);
 			lastLinha_2fix = 1;
 		}
 
 		else{
 			
-			if (lastLinha_2fix) imprimeLinha(&linha_2, num, initFix, 2);
+			if (lastLinha_2fix) imprimeLinha(&linha_2, initFix, 2);
 			if (!initFix) write(1, &newLine, 1);
 			linha_2 = 1;
 			lastLinha_2fix = 0;	
 		}
 
-		imprimeLinha(&linha, num, initFix, 1);
+		imprimeLinha(&linha, initFix, 1);
 		write(1, bufAtual, n); // escreve a linha do ficheiro no terminal
 		initFix = 0;
 
@@ -205,25 +206,30 @@ void exe_3_6(int argc, char **argv){
 		strcpy(bufAnt, bufAtual);
 	}
 
-	if (strcmp(bufAnt2, bufAnt) == 0) imprimeLinha(&linha_2, num, initFix, 2); //buf Fix (caso houvesse repetição na ultima linha) 
+	if (strcmp(bufAnt2, bufAnt) == 0) imprimeLinha(&linha_2, initFix, 2); //buf Fix (caso houvesse repetição na ultima linha) 
 	
 	write(1, &newLine, 1);
 }
 
-void imprimeLinha(int *linha, char* num, int initFix, int v){
+
+void imprimeLinha(int *linha, int initFix, int v){
 
 	int len;
 	char space = ' ';
 	char tab = 9;
+	char num[NUM_SIZE]; // string que contem o numero da linha
 
 	if (v == 2) { write(1, &space, 1); write(1, &space, 1); }
 	else write(1, &tab, 1);
+	
 	sprintf(num, "%d ", *linha); // coloca o nº da linha numa string
 	for (len = 0; num[len]; len++); // determina a dimensao dessa string
 	write(1, num, len * sizeof(char)); //escreve essa string no terminal
+	
 	*linha = *linha + 1;
 	write(1, &space, 1);
 }
+
 
 void exe_4_1(int agrc, char **argv){
 
