@@ -214,12 +214,15 @@ void imprimeLinha(int *linha, char* num, int initFix, int v){
 
 	int len;
 	char space = ' ';
+	char tab = 9;
 
-	if (v == 2) write(1, &space, 1);
+	if (v == 2) { write(1, &space, 1); write(1, &space, 1); }
+	else write(1, &tab, 1);
 	sprintf(num, "%d ", *linha); // coloca o nº da linha numa string
 	for (len = 0; num[len]; len++); // determina a dimensao dessa string
 	write(1, num, len * sizeof(char)); //escreve essa string no terminal
 	*linha = *linha + 1;
+	write(1, &space, 1);
 }
 
 void exe_4_1(int agrc, char **argv){
