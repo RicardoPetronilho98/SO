@@ -73,7 +73,7 @@ void exe_3_1_v2(){
 	}
 }
 
-void exe_3_2(char **argv){
+void exe_3_2(const char **argv){
 
 	char c = 'a';
 	int n, f;
@@ -88,7 +88,7 @@ void exe_3_2(char **argv){
 	exit(n);
 }
 
-int convertStringToInt(char *str){
+int convertStringToInt(const char *str){
 
 	int n = 0;
 	int i;
@@ -101,7 +101,7 @@ int convertStringToInt(char *str){
 	return n;
 }
 
-void exe_3_3(char **argv){ 
+void exe_3_3(const char **argv){ 
 
 	/* 
 		nota: (ENTER) conta como caracter ou seja, ao introduzir por exemplo 
@@ -120,7 +120,7 @@ void exe_3_3(char **argv){
 }
 
 
-void exe_3_4(char **argv){
+void exe_3_4(const char **argv){
 
 	exe_3_3(argv);
 }
@@ -159,79 +159,71 @@ void exe_3_5(){
 	write(1, buf, n + 1); // escreve essa mesma linha para testar se esta correto
 }
 
-void exe_3_6(int argc, char **argv){
 
-	ssize_t n;
-	int N = 1024; // reservar 1 MB para o buffer
-	int field;
-	int linha = 1; // nº da linha
-	int linha_2 = 1;
-	int initFix = 1;
-	int lastLinha_2fix = 0;
-	char newLine = '\n';
-	char *bufAnt2 = malloc(N);
-	char *bufAnt = malloc(N); // criar o buffer com os 1MB
-	char *bufAtual = malloc(N);
-
-	if (argc <= 1) field = 0;  
-	else field = open(argv[1], O_RDONLY, ALL_PERMI);
-
-	if (field == -1){
-		perror("erro ao ler ficheiro");
-		exit(-1);
-	}
-
-	while( (n = readln(field, bufAtual, N)) > 0){
-
-		if (strcmp(bufAtual, bufAnt) == 0){ //caso seja igual ao anterior imprime a linha_2
-
-			imprimeLinha(&linha_2, initFix, 2);
-			write(1, &newLine, 1);
-			lastLinha_2fix = 1;
-		}
-
-		else{
-			
-			if (lastLinha_2fix) imprimeLinha(&linha_2, initFix, 2);
-			if (!initFix) write(1, &newLine, 1);
-			linha_2 = 1;
-			lastLinha_2fix = 0;	
-		}
-
-		imprimeLinha(&linha, initFix, 1);
-		write(1, bufAtual, n); // escreve a linha do ficheiro no terminal
-		initFix = 0;
-
-		strcpy(bufAnt2, bufAnt);
-		strcpy(bufAnt, bufAtual);
-	}
-
-	if (strcmp(bufAnt2, bufAnt) == 0) imprimeLinha(&linha_2, initFix, 2); //buf Fix (caso houvesse repetição na ultima linha) 
-	
-	write(1, &newLine, 1);
+void exe_3_6(int argc, const char **argv){
+    
+    int N = sizeof(char) * 1024; // 1024 Bytes = 1 MB - memória reservada para o buffer
+    int field;
+    int len;
+    int linha_1 = 1;
+    int linha_2 = 1;
+    int fixLastLinha_2 = 0;
+    ssize_t n1;
+    ssize_t n2;
+    char *buf = malloc(N);
+    char *bufNext = malloc(N);
+    char *num = malloc(NUM_SIZE * sizeof(char)); // string que contem o numero da linha
+    char newLine = '\n';
+    
+    if (argc <= 1) field = 0;
+    else if ( (field = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){ //ler do ficheiro
+        perror("impossível ler ficheiro");
+        exit(-1);
+    }
+    
+    n1 = readln(field, buf, N);
+    
+    while(n1){ //o que interessa é que o n1 (dimensão do buf) contenha informação para escrita
+        
+        n2 = readln(field, bufNext, N);
+        
+        sprintf(num, "%d ", linha_1); // coloca o nº da linha_1 numa string
+        for (len = 0; num[len]; len++); // determina a dimensao dessa string
+        write(1, num, len * sizeof(char)); //escreve essa string (nº da linha_1) no terminal
+        write(1, buf, n1);
+        
+        if ( strcmp(buf, bufNext) == 0 && n2){ //n2 garante que a ultima linha caso nao entre em BUG
+            
+            fixLastLinha_2 = 1;
+            
+            loop:
+                sprintf(num, " %d", linha_2); // coloca o nº da linha_2 numa string
+                for (len = 0; num[len]; len++); // determina a dimensao dessa string
+                write(1, num, len * sizeof(char)); //escreve essa string (nº da linha_2) no terminal
+                linha_2++;
+                if (fixLastLinha_2 == 0) linha_2 = 1; //neste ponto ja passou no goto
+        }else{
+            
+            if (fixLastLinha_2 == 1) { // Correção do bug de ultima repetição não ser numerada
+                fixLastLinha_2 = 0;
+                goto loop;
+            }
+        }
+        
+        
+        write(1, &newLine, sizeof(char));
+        linha_1++;
+        strcpy(buf, bufNext);
+        n1 = n2;
+    }
+    
+    free(num);
+    free(buf);
+    free(bufNext);
 }
 
 
-void imprimeLinha(int *linha, int initFix, int v){
-
-	int len;
-	char space = ' ';
-	char tab = 9;
-	char num[NUM_SIZE]; // string que contem o numero da linha
-
-	if (v == 2) { write(1, &space, 1); write(1, &space, 1); }
-	else write(1, &tab, 1);
-	
-	sprintf(num, "%d ", *linha); // coloca o nº da linha numa string
-	for (len = 0; num[len]; len++); // determina a dimensao dessa string
-	write(1, num, len * sizeof(char)); //escreve essa string no terminal
-	
-	*linha = *linha + 1;
-	write(1, &space, 1);
-}
-
-
-void exe_4_1(int agrc, char **argv){
+void exe_4_1(int agrc, const char **argv){
 
 	int i, f, n;
 	int buffSize = 1024 * sizeof(char); //  1024 bytes = 1 MB
@@ -256,7 +248,7 @@ void exe_4_1(int agrc, char **argv){
 	}
 }
 
-void exe_4_6(char **argv){
+void exe_4_6(const char **argv){
 
 	int f1, f2, n1, n2;
 	char c1, c2;
@@ -281,7 +273,7 @@ void exe_4_6(char **argv){
 }
 
 
-int main(int argc, char **argv){	
+int main(int argc, const char **argv){	
 
 	int exe = 3;
 	int alinea = 6; 

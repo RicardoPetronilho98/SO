@@ -6,15 +6,15 @@ void exemplo_5();
 void exemplo_6();
 
 void exe_3_1();
-void exe_3_2(char **argv);
-void exe_3_3(char **argv);
-void exe_3_4(char **argv);
+void exe_3_2(const char **argv);
+void exe_3_3(const char **argv);
+void exe_3_4(const char **argv);
 void exe_3_5();
-void exe_3_6(int argc, char **argv);
+void exe_3_6(int argc, const char **argv);
 
-void exe_4_1(int argc, char **argv);
-void exe_4_6(char **argv);
+void exe_4_1(int argc,const char **argv);
+void exe_4_6(const char **argv);
 
 ssize_t readln(int fildes, void *buf, size_t nbyte);
-int convertStringToInt(char *str);
+int convertStringToInt(const char *str);
 void imprimeLinha(int *linha_2, int initFix, int v);
