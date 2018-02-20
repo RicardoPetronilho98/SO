@@ -134,6 +134,7 @@ ssize_t readln(int fildes, void *buf, size_t nbyte){
 	while(i < nbyte){
 
 		n = read(fildes, (char *) buf + i, sizeof(char));
+		//                >>> n <<< ??
 		if ( *((char *) buf + i) == '\n' || n <= 0) break;
 		i++;
 	}
@@ -225,31 +226,65 @@ void exe_3_6(int argc, const char **argv){
     free(bufNext);
 }
 
+
 int create_buffer(int filedes, struct buffer_t *buffer, size_t nbyte){
+    
+    if (buffer == NULL){
+        perror("could not allocate buffer_t memory");
+        exit(20);
+    }
+    
+    buffer->size = nbyte;
+    buffer->buf = malloc ( buffer->size * sizeof(char) );
+    buffer->field = filedes;
+    buffer->lastRead = 0;
+    buffer->lastLine = 0;
 
-	p_buffer_t buf = malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
-	
-	if (buf == NULL){
-		perror("could not allocate buffer_t memory");
-		exit(20);
-	}
-
-	buf->buf = malloc ( nbyte * sizeof(char) );
-	buf->field = filedes;
-
-	return 0;
+    return 0;
 }
+
 
 int destroy_buffer(struct buffer_t *buffer){
-
-	free(buffer);
-
-	return 0;
+    
+    free(buffer);
+    
+    return 0;
 }
 
-ssize_t readln_2(struct buffer_t *bufer, void **buf){
 
-	return 0;
+ssize_t readln_2(struct buffer_t *bufer, void **buf){
+    
+    size_t n;
+    int whereBarraN;
+        
+    n = read(bufer->field,(char*)buf + bufer->lastRead, bufer->size * sizeof(char));
+    for (whereBarraN = bufer->lastLine; *( (char*)buf + whereBarraN) != '\n' && n > 0; whereBarraN++); // determinar onde esta o '\n'
+    bufer->lastLine = whereBarraN;
+    bufer->lastRead += n;        
+    
+    if (bufer->lastRead == bufer->size){
+        perror("Memoria reservada para o buffer insuficiente");
+        exit(-1);
+    }
+    	
+    return bufer->lastLine;
+}
+
+
+void exe_3_7(const char **argv){
+    
+    p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
+    ssize_t n;
+    size_t nbyte = 1024 * 10; // 10 KB
+    int field = open(argv[1], O_RDONLY, S_IRUSR);
+    
+    create_buffer(field, buffer, nbyte);
+    
+    n = readln_2(buffer, buffer->buf); // le uma linha do terminal e retorna o tamanho
+
+    write(1, buffer->buf, n + 1); // escreve essa mesma linha para testar se esta correto
+    
+    destroy_buffer(buffer);
 }
 
 
@@ -306,7 +341,7 @@ void exe_4_6(const char **argv){
 int main(int argc, const char **argv){	
 
 	int exe = 3;
-	int alinea = 6; 
+	int alinea = 7; 
 
 	int exemplo = 6;
 
@@ -337,6 +372,10 @@ int main(int argc, const char **argv){
 
 			case 6:
 				exe_3_6(argc, argv);
+				break;
+
+			case 7:
+				exe_3_7(argv);
 				break;
 
 			default:
