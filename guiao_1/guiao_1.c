@@ -257,7 +257,7 @@ ssize_t readln_2(struct buffer_t *bufer, void **buf){
     size_t n;
     int whereBarraN;
         
-    n = read(bufer->field,(char*)buf + bufer->lastRead, bufer->size * sizeof(char));
+    n = read(bufer->field, (char*)buf + bufer->lastRead, bufer->size * sizeof(char));
     for (whereBarraN = bufer->lastLine; *( (char*)buf + whereBarraN) != '\n' && n > 0; whereBarraN++); // determinar onde esta o '\n'
     bufer->lastLine = whereBarraN;
     bufer->lastRead += n;        
@@ -276,14 +276,27 @@ void exe_3_7(const char **argv){
     p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
     ssize_t n;
     size_t nbyte = 1024 * 10; // 10 KB
-    int field = open(argv[1], O_RDONLY, S_IRUSR);
-    
-    create_buffer(field, buffer, nbyte);
-    
-    n = readln_2(buffer, buffer->buf); // le uma linha do terminal e retorna o tamanho
+    int field = open(argv[1], O_RDONLY, S_IRUSR);   
+    int len;
+    int linha = 1;
+    char *num = malloc( NUM_SIZE * sizeof(char) ); // string que contem o numero da linha
+    char newLine = '\n';
+    char tab = 9;
 
-    write(1, buffer->buf, n + 1); // escreve essa mesma linha para testar se esta correto
+    create_buffer(field, buffer, nbyte);
+        
+    while( (n = readln_2(buffer, buffer->buf) ) > 0){
+
+	    sprintf(num, "%d ", linha); // coloca o nº da linha_1 numa string
+	    for (len = 0; num[len]; len++); // determina a dimensao dessa string
+	    write(1, &tab, sizeof(char));
+	    write(1, num, len * sizeof(char)); //escreve essa string (nº da linha_1) no terminal
+	    write(1, buffer->buf, n);
+	    write(1, &newLine, sizeof(char) );
+	    linha++;
+    }
     
+    free(num);
     destroy_buffer(buffer);
 }
 
