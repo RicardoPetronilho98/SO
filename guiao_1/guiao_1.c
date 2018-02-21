@@ -9,9 +9,6 @@
 #include "includes/assinaturas.h"
 #include "includes/exemplos.h"
 
-#define NUM_SIZE 			 	  13
-
-
 
 //array de apontadores para funcoes 
 void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5, exemplo_6};
@@ -177,14 +174,12 @@ void exe_3_6_vDIFICIL(int argc, const char **argv){
     char newLine = '\n';
     char tab = 9;
     
-    if (argc <= 1) field = 0;
-    else if ( (field = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){ //ler do ficheiro
+    if ( (field = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){ //ler do ficheiro
         perror("impossível ler ficheiro");
         exit(-1);
     }
     
-    if (field > 1) n1 = readln(field, buf, N);
-    else n1 = 1;
+   	n1 = readln(field, buf, N);
     
     while(n1){ //o que interessa é que o n1 (dimensão do buf) contenha informação para escrita
         
@@ -259,14 +254,13 @@ void exe_3_6_vFACIL(int argc, const char **argv){
 int create_buffer(int filedes, struct buffer_t *buffer, size_t nbyte){
     
     if (buffer == NULL){
-        perror("could not allocate buffer_t memory");
+        perror("buffer_t memory is not allocated");
         exit(20);
     }
     
     buffer->size = nbyte;
     buffer->buf = malloc ( buffer->size * sizeof(char) );
     buffer->field = filedes;
-    buffer->lastRead = 0;
     buffer->lastLine = 0;
 
     return 0;
@@ -275,6 +269,7 @@ int create_buffer(int filedes, struct buffer_t *buffer, size_t nbyte){
 
 int destroy_buffer(struct buffer_t *buffer){
     
+    free(buffer->buf);
     free(buffer);
     
     return 0;
@@ -283,20 +278,16 @@ int destroy_buffer(struct buffer_t *buffer){
 
 ssize_t readln_2(struct buffer_t *bufer, void **buf){
     
-    size_t n;
-    int whereBarraN;
-        
-    n = read(bufer->field, (char*)buf + bufer->lastRead, bufer->size * sizeof(char));
-    for (whereBarraN = bufer->lastLine; *( (char*)buf + whereBarraN) != '\n' && n > 0; whereBarraN++); // determinar onde esta o '\n'
-    bufer->lastLine = whereBarraN;
-    bufer->lastRead += n;        
-    
-    if (bufer->lastRead == bufer->size){
-        perror("Memoria reservada para o buffer insuficiente");
-        exit(-1);
-    }
+    size_t n; //caracteres lidos
+    int i;
+
+ 	if (bufer->lastLine == 0)
+ 		n = read(bufer->field, (char*)buf, bufer->size * sizeof(char));
+
+    for (i = bufer->lastLine; *( (char*)buf + i) != '\n' && n > 0; i++); // determinar onde esta o '\n'
+    bufer->lastLine = i;
     	
-    return bufer->lastLine;
+    return n; 
 }
 
 
@@ -355,28 +346,45 @@ void exe_4_1(int agrc, const char **argv){
 	}
 }
 
-void exe_4_6(const char **argv){
+void exe_4_6(int argc, const char **argv){
 
 	int f1, f2, n1, n2;
 	char c1, c2;
 	char buf1[] = "True"; 
 	char buf2[] = "False"; 
-	//char newLine = '\n';
+	char newLine = '\n';
 	int count = 0;
+	int len;
 
-	f1 = open(argv[1], O_RDONLY, ALL_PERMI);
-	f2 = open(argv[2], O_RDONLY, ALL_PERMI);
+	if (argc <= 1){
+		perror("não foram passados ficheiros como argumento");
+		exit(40);
+	}
 
-	while ( (n1 = read(f1, &c1, 1)) == -1 
-		 && (n2 = read(f2, &c2, 1)) == -1 
+	if ( (f1 = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){
+		perror("não foi possivel abrir o primeiro ficheiro");
+		exit(30);
+	}
+	
+	if ( (f2 = open(argv[2], O_RDONLY, ALL_PERMI)) == -1){
+		perror("não foi possivel abrir o segundo ficheiro");
+		exit(30);
+	}
+
+	while ( (n1 = read(f1, &c1, sizeof(char)) ) > 0 
+		 && (n2 = read(f2, &c2, sizeof(char)) ) > 0 
 		 && c1 == c2 ) count++;
 
-	if (c1 == c2) write(1, buf1, 4);
-	else write(1, buf2, 5);
+	if (c1 == c2){
+		for (len = 0; buf1[len]; len++);
+		write(1, buf1, len * sizeof(char) );
+	}
+	else{
+		for (len = 0; buf2[len]; len++);
+		write(1, buf2, len * sizeof(char) );
+	}
 
-	printf("\n%d\n", count);
-
-	//write(1, &newLine, 1);
+	write(1, &newLine, 1);
 }
 
 
@@ -413,8 +421,8 @@ int main(int argc, const char **argv){
 				break;
 
 			case 6:
-				//exe_3_6_vDIFICIL(argc, argv);
-				exe_3_6_vFACIL(argc, argv);
+				//exe_3_6_vDIFICIL(argc, argv); //apenas lê do ficheiro
+				exe_3_6_vFACIL(argc, argv); 
 				break;
 
 			case 7:
@@ -437,7 +445,7 @@ int main(int argc, const char **argv){
 				break;
 
 			case 6:
-				exe_4_6(argv);
+				exe_4_6(argc, argv);
 				break;
 
 			default:
