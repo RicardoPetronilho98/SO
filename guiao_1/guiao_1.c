@@ -161,7 +161,7 @@ void exe_3_5(){
 }
 
 
-void exe_3_6(int argc, const char **argv){
+void exe_3_6_vDIFICIL(int argc, const char **argv){
     
     int N = sizeof(char) * 1024; // 1024 Bytes = 1 MB - memória reservada para o buffer
     int field;
@@ -224,6 +224,35 @@ void exe_3_6(int argc, const char **argv){
     free(num);
     free(buf);
     free(bufNext);
+}
+
+
+void exe_3_6_vFACIL(int argc, const char **argv){
+    
+    ssize_t n;
+    int N = sizeof(char) * 1024, field, len, linha = 1;
+    char *buf = malloc(N), *num = malloc(NUM_SIZE * sizeof(char)); // string que contem o numero da linha
+    char newLine = '\n', tab = 9;
+    
+    if (argc <= 1) field = 0; // le do terminal
+    else if ( (field = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){ //ler do ficheiro
+        perror("impossível ler ficheiro");
+        exit(-1);
+    }
+    
+    while( (n = readln(field, buf, N) ) > 0) { 
+        
+        sprintf(num, "%d ", linha); // coloca o nº da linha numa string
+        for (len = 0; num[len]; len++); // determina a dimensao dessa string
+        write(1, &tab, sizeof(char));
+        write(1, num, len * sizeof(char)); //escreve essa string (nº da linha) no terminal
+        write(1, buf, n); 
+        write(1, &newLine, sizeof(char));
+        linha++;
+    }
+    
+    free(num);
+    free(buf);
 }
 
 
@@ -354,7 +383,7 @@ void exe_4_6(const char **argv){
 int main(int argc, const char **argv){	
 
 	int exe = 3;
-	int alinea = 7; 
+	int alinea = 6; 
 
 	int exemplo = 6;
 
@@ -384,7 +413,8 @@ int main(int argc, const char **argv){
 				break;
 
 			case 6:
-				exe_3_6(argc, argv);
+				//exe_3_6_vDIFICIL(argc, argv);
+				exe_3_6_vFACIL(argc, argv);
 				break;
 
 			case 7:
