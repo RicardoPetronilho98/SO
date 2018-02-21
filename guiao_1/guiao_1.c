@@ -234,7 +234,7 @@ void exe_3_6_vFACIL(int argc, const char **argv){
     char *buf = malloc(N), *num = malloc(NUM_SIZE * sizeof(char)); // string que contem o numero da linha
     char newLine = '\n', tab = 9;
     
-    if (argc <= 1) field = 0; // le do terminal
+    if (argc <= 1) field = 0; // ler do terminal
     else if ( (field = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){ //ler do ficheiro
         perror("impossível ler ficheiro");
         exit(-1);
