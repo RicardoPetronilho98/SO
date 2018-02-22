@@ -275,8 +275,7 @@ int destroy_buffer(struct buffer_t *buffer){
         exit(20);
     }
     
-    free(buffer->secundaryBuf);
-    free(buffer->buf);
+    free(buffer->buf); //e preciso isto??
     free(buffer);
     
     return 0;
@@ -297,8 +296,7 @@ ssize_t readln_2(struct buffer_t *bufer, void **buf){
     for (i = bufer->lastLine; *( (char*)buf + i) != '\n' && bufer->bytesRead; i++, bufer->bytesRead--); // determinar onde esta o '\n'
    	len = i - bufer->lastLine;
 
-	bufer->secundaryBuf = malloc(sizeof(char) * len );
-	strncpy(bufer->secundaryBuf, bufer->buf + bufer->lastLine, len);
+	bufer->secundaryBuf = bufer->buf + bufer->lastLine;
 
 	bufer->lastLine = i + 1; 
 
@@ -339,6 +337,7 @@ void exe_3_8(int argc, const char **argv){
     p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
     ssize_t n;
     size_t nbyte = 1024 * 10; // 10 KB
+    //size_t nbyte = 100;
     int field = open(argv[1], O_RDONLY);   
     int len;
     int linha = 1;

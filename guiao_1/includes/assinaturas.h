@@ -6,7 +6,7 @@ typedef struct buffer_t{
 	size_t size;
 	int lastLine; // posição da ultima linha processada
 	void *buf; //buffer principal
-	void *secundaryBuf; //buffer com linha
+	void *secundaryBuf; //buffer com linha (não é memoria alocada, apenas aponta para o conteudo util no buf)
 	int field;
 	int bytesRead;
 
