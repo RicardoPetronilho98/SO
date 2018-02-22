@@ -254,7 +254,7 @@ void exe_3_6_vFACIL(int argc, const char **argv){
 int create_buffer(int filedes, struct buffer_t *buffer, size_t nbyte){
     
     if (buffer == NULL){
-        perror("buffer_t memory is not allocated");
+        perror("could not CREATE buffer_t because its memory is not allocated");
         exit(20);
     }
     
@@ -262,13 +262,20 @@ int create_buffer(int filedes, struct buffer_t *buffer, size_t nbyte){
     buffer->buf = malloc ( buffer->size * sizeof(char) );
     buffer->field = filedes;
     buffer->lastLine = 0;
+    buffer->bytesRead = 0;
 
     return 0;
 }
 
 
 int destroy_buffer(struct buffer_t *buffer){
+
+	if (buffer == NULL){
+        perror("could not DESTROY buffer_t because its memory is not allocated");
+        exit(20);
+    }
     
+    free(buffer->secundaryBuf);
     free(buffer->buf);
     free(buffer);
     
@@ -280,23 +287,59 @@ ssize_t readln_2(struct buffer_t *bufer, void **buf){
     
     size_t n; //caracteres lidos
     int i;
+    int len;
 
- 	if (bufer->lastLine == 0)
+ 	if (bufer->lastLine == 0){
  		n = read(bufer->field, (char*)buf, bufer->size * sizeof(char));
+ 		bufer->bytesRead = n;
+ 	}
 
-    for (i = bufer->lastLine; *( (char*)buf + i) != '\n' && n > 0; i++); // determinar onde esta o '\n'
-    bufer->lastLine = i;
+    for (i = bufer->lastLine; *( (char*)buf + i) != '\n' && bufer->bytesRead; i++, bufer->bytesRead--); // determinar onde esta o '\n'
+   	len = i - bufer->lastLine;
+
+	bufer->secundaryBuf = malloc(sizeof(char) * len );
+	strncpy(bufer->secundaryBuf, bufer->buf + bufer->lastLine, len);
+
+	bufer->lastLine = i + 1; 
+
+	if (bufer->lastLine == bufer->size) 
+		bufer->lastLine = 0; 
     	
-    return n; 
+    return len; 
 }
 
 
 void exe_3_7(const char **argv){
+
+	p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); 
+	ssize_t n;
+	size_t nbyte = 1024 * 10; // 10 KB
+	int field = open(argv[1], O_RDONLY, S_IRUSR);
+	char newLine = '\n';
+	char num[12];
+	int len;
+
+	create_buffer(field, buffer, nbyte);
+
+	n = readln_2(buffer, buffer->buf);
+
+	write(1, buffer->secundaryBuf, n);
+	write(1, &newLine, sizeof(char) );
+	sprintf(num, "%zd", n); 
+    for (len = 0; num[len]; len++); // determina a dimensao dessa string
+	write(1, num, len * sizeof(char) );
+	write(1, &newLine, sizeof(char) );
+
+	destroy_buffer(buffer);
+}
+
+
+void exe_3_8(int argc, const char **argv){
     
     p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
     ssize_t n;
     size_t nbyte = 1024 * 10; // 10 KB
-    int field = open(argv[1], O_RDONLY, S_IRUSR);   
+    int field = open(argv[1], O_RDONLY);   
     int len;
     int linha = 1;
     char *num = malloc( NUM_SIZE * sizeof(char) ); // string que contem o numero da linha
@@ -305,13 +348,13 @@ void exe_3_7(const char **argv){
 
     create_buffer(field, buffer, nbyte);
         
-    while( (n = readln_2(buffer, buffer->buf) ) > 0){
+    while( (n = readln_2(buffer, buffer->buf) ) > 0 && linha < 30){
 
 	    sprintf(num, "%d ", linha); // coloca o nº da linha_1 numa string
 	    for (len = 0; num[len]; len++); // determina a dimensao dessa string
 	    write(1, &tab, sizeof(char));
 	    write(1, num, len * sizeof(char)); //escreve essa string (nº da linha_1) no terminal
-	    write(1, buffer->buf, n);
+	    write(1, buffer->secundaryBuf, n);
 	    write(1, &newLine, sizeof(char) );
 	    linha++;
     }
@@ -391,7 +434,7 @@ void exe_4_6(int argc, const char **argv){
 int main(int argc, const char **argv){	
 
 	int exe = 3;
-	int alinea = 6; 
+	int alinea = 8; 
 
 	int exemplo = 6;
 
@@ -427,6 +470,10 @@ int main(int argc, const char **argv){
 
 			case 7:
 				exe_3_7(argv);
+				break;
+
+			case 8:
+				exe_3_8(argc, argv);
 				break;
 
 			default:

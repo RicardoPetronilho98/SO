@@ -5,8 +5,10 @@ typedef struct buffer_t{
 
 	size_t size;
 	int lastLine; // posição da ultima linha processada
-	void *buf;
+	void *buf; //buffer principal
+	void *secundaryBuf; //buffer com linha
 	int field;
+	int bytesRead;
 
 } *p_buffer_t;
 
@@ -24,6 +26,7 @@ void exe_3_4(const char **argv);
 void exe_3_5();
 void exe_3_6(int argc, const char **argv);
 void exe_3_7(const char **argv);
+void exe_3_8(int argc, const char **argv);
 
 void exe_4_1(int argc, const char **argv);
 void exe_4_6(int argc, const char **argv);
