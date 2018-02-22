@@ -29,6 +29,9 @@ void exe_3_7(const char **argv);
 void exe_3_8(int argc, const char **argv);
 
 void exe_4_1(int argc, const char **argv);
+void exe_4_3(int argc, const char **argv);
+void exe_4_4(int argc, const char **argv);
+void exe_4_5(int argc, const char **argv);
 void exe_4_6(int argc, const char **argv);
 
 ssize_t readln(int fildes, void *buf, size_t nbyte);

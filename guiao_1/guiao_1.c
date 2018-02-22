@@ -59,6 +59,7 @@ void exe_3_1(){
 		write (1, &c, 1);
 }
 
+
 void exe_3_2(const char **argv){
 
 	char c = 'a';
@@ -67,12 +68,13 @@ void exe_3_2(const char **argv){
 	//f é o file descriptor
 	f = open(argv[1], O_WRONLY | O_CREAT, ALL_OWNER_PERMI);
 
-	for (n = 0; n < MEGA_10; n++)
+	for (n = 0; n < MB; n++)
 		write (f, &c, 1); // vai escrever no ficheiro apontado por f, caracter a caracter 
 
 	close(f);
 	exit(n);
 }
+
 
 int convertStringToInt(const char *str){
 
@@ -86,6 +88,7 @@ int convertStringToInt(const char *str){
 
 	return n;
 }
+
 
 void exe_3_3(const char **argv){ 
 
@@ -110,6 +113,7 @@ void exe_3_4(const char **argv){
 
 	exe_3_3(argv);
 }
+
 
 ssize_t readln(int fildes, void *buf, size_t nbyte){
 
@@ -138,7 +142,7 @@ void exe_3_5(){
 
 	ssize_t n;
 	
-	int N = 64; // reservar 64 bytes para o buffer
+	int N = KB; // reservar 1KB bytes para o buffer
 	int *buf = malloc(N); // criar o buffer com os 64 bytes
 
 	n = readln(0, buf, N); // le uma linha do terminal e retorna o tamanho
@@ -149,7 +153,7 @@ void exe_3_5(){
 
 void exe_3_6_vDIFICIL(int argc, const char **argv){
     
-    int N = sizeof(char) * 1024; // 1024 Bytes = 1 MB - memória reservada para o buffer
+    int N = KB; // 1KB - memória reservada para o buffer
     int field;
     int len;
     int linha_1 = 1;
@@ -214,7 +218,7 @@ void exe_3_6_vDIFICIL(int argc, const char **argv){
 void exe_3_6_vFACIL(int argc, const char **argv){
     
     ssize_t n;
-    int N = sizeof(char) * 1024, field, len, linha = 1;
+    int N = KB, field, len, linha = 1;
     char *buf = malloc(N), *num = malloc(NUM_SIZE * sizeof(char)); // string que contem o numero da linha
     char newLine = '\n', tab = 9;
     
@@ -270,7 +274,7 @@ int destroy_buffer(struct buffer_t *buffer){
     return 0;
 }
 
-
+// por o perror caso a memoria do buffer seja insuficiente
 ssize_t readln_2(struct buffer_t *bufer, void **buf){
     
     size_t n; //caracteres lidos
@@ -309,7 +313,7 @@ void exe_3_7(const char **argv){
 
 	p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); 
 	ssize_t n;
-	size_t nbyte = 1024 * 10; // 10 KB
+	size_t nbyte = KB * 10; // 10 KB
 	int field = open(argv[1], O_RDONLY, S_IRUSR);
 	char newLine = '\n';
 	char num[12];
@@ -334,7 +338,7 @@ void exe_3_8(int argc, const char **argv){
     
     p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
     ssize_t n;
-    //size_t nbyte = 1024 * 10; // 10 KB
+    //size_t nbyte = KB * 10; // 10 KB
     size_t nbyte = 30;
     int field = open(argv[1], O_RDONLY);   
     int len;
@@ -364,7 +368,7 @@ void exe_3_8(int argc, const char **argv){
 void exe_4_1(int agrc, const char **argv){
 
 	int i, f, n;
-	int buffSize = 2048 * sizeof(char); // 2 KB
+	int buffSize = KB * 2; // 2 KB
 	char *buf = malloc(buffSize);
 	char c = '\n';
 	
@@ -375,16 +379,33 @@ void exe_4_1(int agrc, const char **argv){
 			exit(f);
 		}
 
-		if ( (n = read(f, buf, buffSize)) == -1){ // le o conteudo do ficheiro
-			perror("Erro ao ler ficheiro");
-			exit(-1);
+		while ( (n = readln(f, buf, buffSize)) > 0){
+
+			write(1, buf, n); // escreve o conteudo do ficheiro no terminal
+			write(1, &c, 1); // new line entre cada ficehiro
 		}
 
 		close(f);
-		write(1, buf, n); // escreve o conteudo do ficheiro no terminal
-		write(1, &c, 1); // new line entre cada ficehiro
 	}
 }
+
+
+void exe_4_3(int argc, const char **argv){
+/*
+	int f;
+	char *buf = malloc(1024 * sizeof(char)) //1KB
+	char newLine = '\n';
+*/
+}
+
+
+void exe_4_4(int argc, const char **argv){	
+}
+
+
+void exe_4_5(int argc, const char **argv){
+}
+
 
 void exe_4_6(int argc, const char **argv){
 
