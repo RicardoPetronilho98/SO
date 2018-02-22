@@ -523,14 +523,14 @@ void exe_4_5(int argc, const char **argv){
 		exit(1);
 	}
 
-	for (i = 1; i < argc; i++){
+	for (i = 1; i < argc; i++){ // para cada ficheiro
 
-		if ( (f = open(argv[i], O_RDONLY, ALL_PERMI)) == -1 ){
+		if ( (f = open(argv[i], O_RDONLY)) == -1 ){
 			perror("could not open file ");
 			exit(f);
 		}
 
-		lines = words = chars = 0;
+		lines = words = chars = 0; // para cada ficheiro os contadores começam a 0 
 
 		while ( (n = readln(f, buf, buffSize)) > 0){
 
@@ -539,7 +539,13 @@ void exe_4_5(int argc, const char **argv){
 			chars += n + 1;
 		}
 
-		Twords += words;
+		if (buf[words + lines] != '\n') { // words + lines (nº de caracteres do ficheiro)
+			//este if acontece quando o ficheiro NÃO acaba com '\n' - buf fix
+			lines--;
+			chars--;
+		}
+
+		Twords += words; // total de todos os ficheiros
 		Tlines += lines;
 		Tchars += chars;
 
@@ -715,4 +721,3 @@ int main(int argc, const char **argv){
 
 	return 0;
 }
-
