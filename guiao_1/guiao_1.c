@@ -336,8 +336,8 @@ void exe_3_8(int argc, const char **argv){
     
     p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
     ssize_t n;
-    size_t nbyte = 1024 * 10; // 10 KB
-    //size_t nbyte = 100;
+    //size_t nbyte = 1024 * 10; // 10 KB
+    size_t nbyte = 30;
     int field = open(argv[1], O_RDONLY);   
     int len;
     int linha = 1;
