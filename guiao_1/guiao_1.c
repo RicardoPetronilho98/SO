@@ -9,6 +9,7 @@
 #include "includes/assinaturas.h"
 #include "includes/exemplos.h"
 
+
 //array de apontadores para funcoes 
 void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5, exemplo_6};
 
@@ -545,9 +546,9 @@ void exe_4_6(int argc, const char **argv){
 int main(int argc, const char **argv){	
 
 	int exe = 4;
-	int alinea = 4; 
+	int alinea = 5; 
 
-	int exemplo = 6;
+	int exemplo = 6; // exemplos contidos em /includes/exemplos.h
 
 	if (exe == 3){
 
@@ -588,13 +589,11 @@ int main(int argc, const char **argv){
 				break;
 
 			default:
-				perror("nao existe essa alinea");
+				perror("exe 3 ---> nao existe essa alinea");
 				exit(-1);
 		}	
 
-	}
-
-	else if (exe == 4){
+	} else if (exe == 4){
 
 		switch(alinea){
 
@@ -619,10 +618,9 @@ int main(int argc, const char **argv){
 				break;
 
 			default:
-				perror("nao existe essa alinea");
+				perror("exe 4 ---> nao existe essa alinea");
 				exit(-1);
-		}	
-
+		} 
 	}
 
 	else arr[exemplo - 1]();
