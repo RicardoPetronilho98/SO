@@ -9,7 +9,6 @@
 #include "includes/assinaturas.h"
 #include "includes/exemplos.h"
 
-
 //array de apontadores para funcoes 
 void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5, exemplo_6};
 
@@ -365,14 +364,19 @@ void exe_3_8(int argc, const char **argv){
 }
 
 
-void exe_4_1(int agrc, const char **argv){
+void exe_4_1(int argc, const char **argv){
 
 	int i, f, n;
 	int buffSize = KB * 2; // 2 KB
 	char *buf = malloc(buffSize);
 	char c = '\n';
+
+	if (argc < 2){
+		perror("file was not specified");
+		exit(200);
+	}
 	
-	for (i = 1; i < agrc; i++){
+	for (i = 1; i < argc; i++){
 
 		if ( (f = open(argv[i], O_RDONLY, ALL_PERMI)) == -1 ){
 			perror("could not open file ");
@@ -391,15 +395,104 @@ void exe_4_1(int agrc, const char **argv){
 
 
 void exe_4_3(int argc, const char **argv){
-/*
-	int f;
-	char *buf = malloc(1024 * sizeof(char)) //1KB
-	char newLine = '\n';
-*/
+
+	// clear && ./guiao_1 -3 /Users/ricardopetronilho/Desktop/SO/guiao_1/file.txt /Users/ricardopetronilho/Desktop/SO/guiao_1/file2.txt
+
+	int n, f, i;
+	int buffSize = KB * 2;
+	int setasSize = 4;
+	int linhaParaImprimir; 
+	int linha;
+	char c = '\n';
+	char setaDir[] = "==> ";
+	char setaEsq[] = " <==";
+	char *buf = malloc(buffSize); 
+
+	if (argc < 2){
+		perror("file was not specified");
+		exit(1);
+	}
+
+	if (argv[1][0] == '-'){
+		i = 2; // significa que a linha foi especificada
+		linhaParaImprimir = convertStringToInt(argv[1] + 1);
+	}
+	else{
+		i = 1;
+		linha = 10; // por omissão lê 10 linhas
+	}
+
+	
+	for ( ; i < argc; i++){
+
+		linha = linhaParaImprimir;
+
+		if ( (f = open(argv[i], O_RDONLY, ALL_PERMI)) == -1 ){
+			perror("could not open file ");
+			exit(f);
+		}
+
+		for (n = 0; argv[i][n]; n++);
+
+		write(1, setaDir, setasSize);
+		write(1, argv[i], n * sizeof(char) );
+		write(1, setaEsq, setasSize); 
+		write(1, &c, 1); 
+
+		while ( (n = readln(f, buf, buffSize)) > 0 && linha){
+
+			write(1, buf, n); // escreve o conteudo do ficheiro no terminal
+			write(1, &c, 1); // new line entre cada ficehiro
+			linha--;
+		}
+
+		close(f);
+	}
+
+	free(buf);
 }
 
 
-void exe_4_4(int argc, const char **argv){	
+void exe_4_4(int argc, const char **argv){
+	
+	int n, f, i; 
+	int len;
+	int buffSize = KB * 2;
+	char c = '\n';
+	char *buf = malloc(buffSize); 
+	char doisPontos = ':';
+
+	if (argc < 3){
+		perror("file or word is not specified");
+		exit(1);
+	}
+
+	//for (len = 0; argv[1][len]; len++);
+
+	for (i = 2; i < argc; i++){
+
+		if ( (f = open(argv[i], O_RDONLY, ALL_PERMI)) == -1 ){
+			perror("could not open file ");
+			exit(f);
+		}
+
+		for (len = 0; argv[i][len]; len++);
+
+		while ( (n = readln(f, buf, buffSize)) > 0){
+
+			if ( strstr(buf, argv[1]) != NULL){
+
+				write(1, argv[i], len * sizeof(char) );
+				write(1, &doisPontos, sizeof(char));
+				write(1, buf, n * sizeof(char) ); // escreve o conteudo do ficheiro no terminal
+				write(1, &c, 1); // new line entre cada ficehiro
+			}
+		}
+
+		close(f);
+	}
+
+	free(buf);	
 }
 
 
@@ -452,7 +545,7 @@ void exe_4_6(int argc, const char **argv){
 int main(int argc, const char **argv){	
 
 	int exe = 4;
-	int alinea = 1; 
+	int alinea = 4; 
 
 	int exemplo = 6;
 
@@ -507,6 +600,18 @@ int main(int argc, const char **argv){
 
 			case 1:
 				exe_4_1(argc, argv);
+				break;
+
+			case 3:
+				exe_4_3(argc, argv);
+				break;
+
+			case 4:
+				exe_4_4(argc, argv);
+				break;
+
+			case 5:
+				exe_4_5(argc, argv);
 				break;
 
 			case 6:

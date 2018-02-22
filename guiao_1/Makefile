@@ -1,6 +1,7 @@
 execute: compile
-	./guiao_1 /Users/ricardopetronilho/Desktop/SO/guiao_1/file.txt /Users/ricardopetronilho/Desktop/SO/guiao_1/file2.txt
+	./guiao_1 ola /Users/ricardopetronilho/Desktop/SO/guiao_1/file.txt /Users/ricardopetronilho/Desktop/SO/guiao_1/file2.txt
 
+#./guiao_1 /Users/ricardopetronilho/Desktop/SO/guiao_1/file.txt /Users/ricardopetronilho/Desktop/SO/guiao_1/file2.txt
 compile: clear
 	gcc -Wall guiao_1.c -o guiao_1
 
