@@ -468,8 +468,6 @@ void exe_4_4(int argc, const char **argv){
 		exit(1);
 	}
 
-	//for (len = 0; argv[1][len]; len++);
-
 	for (i = 2; i < argc; i++){
 
 		if ( (f = open(argv[i], O_RDONLY, ALL_PERMI)) == -1 ){
@@ -497,7 +495,97 @@ void exe_4_4(int argc, const char **argv){
 }
 
 
+int wordsInString(char *str, int N){
+
+	int i, count = 0;
+
+	for (i = 0; str[i] && N; i++, N--)
+		if (str[i] == ' ') count++;
+
+	return count;
+}
+
+
 void exe_4_5(int argc, const char **argv){
+
+	int n, f, i, len;
+	int lines, words, chars;
+	int Tlines = 0, Twords = 0, Tchars = 0;
+	int buffSize = KB * 2;
+	char c = '\n';
+	char space = ' ';
+	char *buf = malloc(buffSize); 
+	char tab = 9;
+	char num[12];
+
+	if (argc < 2){
+		perror("file not specified");
+		exit(1);
+	}
+
+	for (i = 1; i < argc; i++){
+
+		if ( (f = open(argv[i], O_RDONLY, ALL_PERMI)) == -1 ){
+			perror("could not open file ");
+			exit(f);
+		}
+
+		lines = words = chars = 0;
+
+		while ( (n = readln(f, buf, buffSize)) > 0){
+
+			words += wordsInString(buf, n) + 1;
+			lines++;
+			chars += n + 1;
+		}
+
+		Twords += words;
+		Tlines += lines;
+		Tchars += chars;
+
+		write(1, &tab, sizeof(char));
+		sprintf(num, "%d", lines);
+		for(len = 0; num[len]; len++);
+		write(1, num, sizeof(char) * len);
+		write(1, &tab, sizeof(char));
+
+		sprintf(num, "%d", words);
+		for(len = 0; num[len]; len++);
+		write(1, num, sizeof(char) * len);
+		write(1, &tab, sizeof(char));
+
+		sprintf(num, "%d", chars);
+		for(len = 0; num[len]; len++);
+		write(1, num, sizeof(char) * len);
+
+		write(1, &space, sizeof(char));
+		for(len = 0; argv[i][len]; len++);
+		write(1, argv[i], len * sizeof(char) );
+		write(1, &c, 1); // new line entre cada ficehiro
+
+		close(f);
+	}
+
+	write(1, &tab, sizeof(char));
+	sprintf(num, "%d", Tlines);
+	for(len = 0; num[len]; len++);
+	write(1, num, sizeof(char) * len);
+	write(1, &tab, sizeof(char));
+
+	sprintf(num, "%d", Twords);
+	for(len = 0; num[len]; len++);
+	write(1, num, sizeof(char) * len);
+	write(1, &tab, sizeof(char));
+
+	sprintf(num, "%d", Tchars);
+	for(len = 0; num[len]; len++);
+	write(1, num, sizeof(char) * len);
+
+	write(1, &space, sizeof(char));
+	write(1, "total", 5 * sizeof(char) );
+	write(1, &c, 1); // new line entre cada ficehiro
+
+	free(buf);	
 }
 
 
