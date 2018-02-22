@@ -59,17 +59,6 @@ void exe_3_1(){
 		write (1, &c, 1);
 }
 
-void exe_3_1_v2(){
-
-	char c;
-	int n = 1;
-
-	while (n > 0){
-		n = read(0, &c, 1);
-		write (1, &c, 1);
-	}
-}
-
 void exe_3_2(const char **argv){
 
 	char c = 'a';
@@ -375,24 +364,24 @@ void exe_3_8(int argc, const char **argv){
 void exe_4_1(int agrc, const char **argv){
 
 	int i, f, n;
-	int buffSize = 1024 * sizeof(char); //  1024 bytes = 1 MB
+	int buffSize = 2048 * sizeof(char); // 2 KB
 	char *buf = malloc(buffSize);
 	char c = '\n';
 	
 	for (i = 1; i < agrc; i++){
 
-		f = open(argv[i], O_RDONLY, ALL_PERMI);
+		if ( (f = open(argv[i], O_RDONLY, ALL_PERMI)) == -1 ){
+			perror("could not open file ");
+			exit(f);
+		}
 
 		if ( (n = read(f, buf, buffSize)) == -1){ // le o conteudo do ficheiro
-
 			perror("Erro ao ler ficheiro");
 			exit(-1);
 		}
 
 		close(f);
-
 		write(1, buf, n); // escreve o conteudo do ficheiro no terminal
-
 		write(1, &c, 1); // new line entre cada ficehiro
 	}
 }
@@ -441,8 +430,8 @@ void exe_4_6(int argc, const char **argv){
 
 int main(int argc, const char **argv){	
 
-	int exe = 3;
-	int alinea = 8; 
+	int exe = 4;
+	int alinea = 1; 
 
 	int exemplo = 6;
 
