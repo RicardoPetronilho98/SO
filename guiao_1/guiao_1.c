@@ -287,13 +287,22 @@ ssize_t readln_2(struct buffer_t *bufer, void **buf){
     size_t n; //caracteres lidos
     int i;
     int len;
+    int v = 0;
 
+    fix:
  	if (bufer->lastLine == 0){
- 		n = read(bufer->field, (char*)buf, bufer->size * sizeof(char));
+ 		n = read( bufer->field, (char*)buf, bufer->size * sizeof(char) );
  		bufer->bytesRead = n;
  	}
 
     for (i = bufer->lastLine; *( (char*)buf + i) != '\n' && bufer->bytesRead; i++, bufer->bytesRead--); // determinar onde esta o '\n'
+   	
+   	if (*( (char*)buf + i) != '\n') { 
+   		bufer->lastLine = 0;
+   		v = 1;
+   		goto fix; 
+   	}
+
    	len = i - bufer->lastLine;
 
 	bufer->secundaryBuf = bufer->buf + bufer->lastLine;
