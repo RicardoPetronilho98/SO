@@ -12,7 +12,7 @@ clean:
 	rm hello.txt file3.txt guiao_1 helloWorld.txt arrayA.txt
 
 git: git_commit
-	git push origin master
+	git push origin master --force
 
 git_commit: git_add
 	git commit -m "auto-commit"
