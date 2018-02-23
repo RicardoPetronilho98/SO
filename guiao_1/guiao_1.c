@@ -610,39 +610,38 @@ void exe_4_6(int argc, const char **argv){
 
 	int f1, f2, n1, n2;
 	char c1, c2;
-	char buf1[] = "True"; 
-	char buf2[] = "False"; 
 	char newLine = '\n';
-	int count = 0;
-	int len;
+	int count = 0, lines = 0, len;
+	char str[1024];
 
-	if (argc <= 1){
-		perror("não foram passados ficheiros como argumento");
+	if (argc < 2){
+		perror("não foram passados ficheiros suficientes como argumento");
 		exit(40);
 	}
 
 	if ( (f1 = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){
-		perror("não foi possivel abrir o primeiro ficheiro");
+		perror("não foi possivel abrir o ficheiro 1");
 		exit(30);
 	}
 	
 	if ( (f2 = open(argv[2], O_RDONLY, ALL_PERMI)) == -1){
-		perror("não foi possivel abrir o segundo ficheiro");
+		perror("não foi possivel abrir o ficheiro 2");
 		exit(30);
 	}
 
 	while ( (n1 = read(f1, &c1, sizeof(char)) ) > 0 
-		 && (n2 = read(f2, &c2, sizeof(char)) ) > 0 
-		 && c1 == c2 ) count++;
+		 && (n2 = read(f2, &c2, sizeof(char)) ) > 0 ){
+		
+		if (c1 == c2) count++;
+		if (c1 == '\n' && c2 == '\n') lines++; 
+	}
 
-	if (c1 == c2){
-		for (len = 0; buf1[len]; len++);
-		write(1, buf1, len * sizeof(char) );
-	}
-	else{
-		for (len = 0; buf2[len]; len++);
-		write(1, buf2, len * sizeof(char) );
-	}
+	lines++;
+	
+	sprintf(str, "%s %s differ: char %d, line %d", argv[1], argv[2], count, lines);
+	for (len = 0; str[len]; len++);
+
+	if ( !(c1 == c2) ) write(1, str, len * sizeof(char) );
 
 	write(1, &newLine, 1);
 }
