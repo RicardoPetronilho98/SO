@@ -515,7 +515,6 @@ void exe_4_5(int argc, const char **argv){
 	char c = '\n';
 	char space = ' ';
 	char *buf = malloc(buffSize); 
-	char tab = 9;
 	char num[12];
 
 	if (argc < 2){
@@ -549,19 +548,19 @@ void exe_4_5(int argc, const char **argv){
 		Tlines += lines;
 		Tchars += chars;
 
-		write(1, &tab, sizeof(char));
 		sprintf(num, "%d", lines);
 		for(len = 0; num[len]; len++);
+		for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
 		write(1, num, sizeof(char) * len);
-		write(1, &tab, sizeof(char));
 
 		sprintf(num, "%d", words);
 		for(len = 0; num[len]; len++);
+		for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
 		write(1, num, sizeof(char) * len);
-		write(1, &tab, sizeof(char));
 
 		sprintf(num, "%d", chars);
 		for(len = 0; num[len]; len++);
+		for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
 		write(1, num, sizeof(char) * len);
 
 		write(1, &space, sizeof(char));
@@ -572,19 +571,19 @@ void exe_4_5(int argc, const char **argv){
 		close(f);
 	}
 
-	write(1, &tab, sizeof(char));
 	sprintf(num, "%d", Tlines);
 	for(len = 0; num[len]; len++);
+	for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
 	write(1, num, sizeof(char) * len);
-	write(1, &tab, sizeof(char));
 
 	sprintf(num, "%d", Twords);
 	for(len = 0; num[len]; len++);
+	for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
 	write(1, num, sizeof(char) * len);
-	write(1, &tab, sizeof(char));
 
 	sprintf(num, "%d", Tchars);
 	for(len = 0; num[len]; len++);
+	for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
 	write(1, num, sizeof(char) * len);
 
 	write(1, &space, sizeof(char));
