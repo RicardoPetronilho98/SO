@@ -506,6 +506,16 @@ int wordsInString(char *str, int N){
 }
 
 
+void alignSpaces(int N, int len){
+
+	int i;
+	char space = ' ';
+
+	for(i = 0; i < N - len; i++) 
+		write(1, &space, sizeof(char));
+}
+
+
 void exe_4_5(int argc, const char **argv){
 
 	int n, f, i, len;
@@ -516,6 +526,7 @@ void exe_4_5(int argc, const char **argv){
 	char space = ' ';
 	char *buf = malloc(buffSize); 
 	char num[12];
+	int maxSpaces = 9;
 
 	if (argc < 2){
 		perror("file not specified");
@@ -550,17 +561,17 @@ void exe_4_5(int argc, const char **argv){
 
 		sprintf(num, "%d", lines);
 		for(len = 0; num[len]; len++);
-		for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
+		alignSpaces(maxSpaces, len);
 		write(1, num, sizeof(char) * len);
 
 		sprintf(num, "%d", words);
 		for(len = 0; num[len]; len++);
-		for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
+		alignSpaces(maxSpaces, len);
 		write(1, num, sizeof(char) * len);
 
 		sprintf(num, "%d", chars);
 		for(len = 0; num[len]; len++);
-		for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
+		alignSpaces(maxSpaces, len);
 		write(1, num, sizeof(char) * len);
 
 		write(1, &space, sizeof(char));
@@ -573,17 +584,17 @@ void exe_4_5(int argc, const char **argv){
 
 	sprintf(num, "%d", Tlines);
 	for(len = 0; num[len]; len++);
-	for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
+	alignSpaces(maxSpaces, len);
 	write(1, num, sizeof(char) * len);
 
 	sprintf(num, "%d", Twords);
 	for(len = 0; num[len]; len++);
-	for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
+	alignSpaces(maxSpaces, len);
 	write(1, num, sizeof(char) * len);
 
 	sprintf(num, "%d", Tchars);
 	for(len = 0; num[len]; len++);
-	for(n = 0; n < 8 - len; n++) write(1, &space, sizeof(char));
+	alignSpaces(maxSpaces, len);
 	write(1, num, sizeof(char) * len);
 
 	write(1, &space, sizeof(char));

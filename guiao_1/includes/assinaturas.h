@@ -43,5 +43,6 @@ int destroy_buffer(struct buffer_t *buffer);
 ssize_t readln_2(struct buffer_t *bufer, void **buf);
 
 int wordsInString(char *str, int N);
+void alignSpaces(int N, int len);
 
 #endif
