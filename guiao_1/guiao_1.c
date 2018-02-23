@@ -220,7 +220,8 @@ void exe_3_6_vFACIL(int argc, const char **argv){
     ssize_t n;
     int N = KB, field, len, linha = 1;
     char *buf = malloc(N), *num = malloc(NUM_SIZE * sizeof(char)); // string que contem o numero da linha
-    char newLine = '\n', tab = 9;
+    char newLine = '\n';
+    int maxSpaces = 6;
     
     if (argc <= 1) field = 0; // ler do terminal
     else if ( (field = open(argv[1], O_RDONLY, ALL_PERMI)) == -1){ //ler do ficheiro
@@ -230,9 +231,9 @@ void exe_3_6_vFACIL(int argc, const char **argv){
     
     while( (n = readln(field, buf, N) ) > 0) { 
         
-        sprintf(num, "%d ", linha); // coloca o nº da linha numa string
+        sprintf(num, "%d  ", linha); // coloca o nº da linha numa string
         for (len = 0; num[len]; len++); // determina a dimensao dessa string
-        write(1, &tab, sizeof(char));
+		alignSpaces(maxSpaces, len - 2);
         write(1, num, len * sizeof(char)); //escreve essa string (nº da linha) no terminal
         write(1, buf, n); 
         write(1, &newLine, sizeof(char));
@@ -526,7 +527,7 @@ void exe_4_5(int argc, const char **argv){
 	char space = ' ';
 	char *buf = malloc(buffSize); 
 	char num[12];
-	int maxSpaces = 9;
+	int maxSpaces = 8;
 
 	if (argc < 2){
 		perror("file not specified");
@@ -650,7 +651,7 @@ void exe_4_6(int argc, const char **argv){
 int main(int argc, const char **argv){	
 
 	int exe = 4;
-	int alinea = 5; 
+	int alinea = 6; 
 
 	int exemplo = 6; // exemplos contidos em /includes/exemplos.h
 
