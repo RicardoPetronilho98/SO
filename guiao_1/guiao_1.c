@@ -9,7 +9,6 @@
 #include "includes/assinaturas.h"
 #include "includes/exemplos.h"
 
-
 //array de apontadores para funcoes 
 void (*arr[])(void) = {exemplo_1, exemplo_2, exemplo_3, exemplo_4, exemplo_5, exemplo_6};
 
@@ -290,13 +289,6 @@ ssize_t readln_2(struct buffer_t *bufer, void **buf){
  	}
 
     for (i = bufer->lastLine; *( (char*)buf + i) != '\n' && bufer->bytesRead; i++, bufer->bytesRead--); // determinar onde esta o '\n'
-   	
-   	if (*( (char*)buf + i) != '\n') { 
-   		bufer->lastLine = 0;
-   		v = 1;
-   		goto fix; 
-   	}
-
    	len = i - bufer->lastLine;
 
 	bufer->secundaryBuf = bufer->buf + bufer->lastLine;
