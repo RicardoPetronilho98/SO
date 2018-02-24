@@ -274,25 +274,42 @@ int destroy_buffer(struct buffer_t *buffer){
 }
 
 
+//#pragma GCC optimize ("unroll-loops")
+
+void writeOnBuffer(char *buf, int N, char c){
+
+	// Utiliza o método de LOOP UNROLL para tornar a escrita masi eficaz
+
+    int i, u;
+
+    for(i = 0; i < N; i += UNROLL)
+    	for (u = 0; u < UNROLL; u++)
+    		buf[u + i] = c; 
+}
+
+//#pragma GCC reset_options
+
+
 ssize_t readln_2(struct buffer_t *buffer, void **buf){
 
 	int i, lineSize = 0;
 	size_t n;
+	void *p = buffer->line;
+
+	if ( *((char*)p ) == '\377') return 0;
 
 	start:
 
 	/* caso o buffer estaja vazio (ou a sua informação esteja totalmente utilizada)
 	   lê novamente - buffer->size - bytes de informação e coloca no buffer->buf
 	*/
-	if (buffer->lastLine == 0) 
+	if (buffer->lastLine == 0){ 
+		writeOnBuffer((char*)buf + lineSize, buffer->size - lineSize, '\377');
 		n = read(buffer->field, (char*)buf + lineSize, buffer->size - lineSize); 
-
-	if (n == 0){ // caso para mandar parar
-		//return 0;
 	}
 
 	// deteta a posição do '\n' (para saber até onde se imprime a linha)
-	for (i = buffer->lastLine; *( (char*)buf + i) != '\n' && i < buffer->size; i++);
+	for (i = buffer->lastLine; *( (char*)buf + i) != '\n' && i < buffer->size && *( (char*)buf + i) != '\377'; i++);
 
 	// se entrar neste if singifica que o buffer não tem memória para conter uma única linha
 	if (i == buffer->size && buffer->lastLine == 0 && n > 0){
@@ -348,12 +365,13 @@ void exe_3_8(int argc, const char **argv){
     
     p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
     ssize_t n;
-    size_t nbyte = 10;
+    size_t nbyte = 10 * KB;
     int field = open(argv[1], O_RDONLY);   
     int len;
     int linha = 1;
     char *num = malloc( NUM_SIZE * sizeof(char) ); // string que contem o numero da linha
     char tab = 9;
+    char newLine = '\n';
 
     create_buffer(field, buffer, nbyte);
         
@@ -364,12 +382,13 @@ void exe_3_8(int argc, const char **argv){
 	    write(1, &tab, sizeof(char));
 	    write(1, num, len * sizeof(char)); //escreve essa string (nº da linha_1) no terminal
 	    write(1, buffer->line, n);
-	    //write(1, &newLine, sizeof(char) );
 	    linha++;
     }
     
     free(num);
     destroy_buffer(buffer);
+
+    write(1, &newLine, sizeof(char) );
 }
 
 

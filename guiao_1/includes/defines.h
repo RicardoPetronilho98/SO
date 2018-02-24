@@ -7,5 +7,6 @@
 #define ALL_OWNER_PERMI			S_IRUSR | S_IWUSR | S_IXUSR
 #define ALL_PERMI				0777
 #define NUM_SIZE 			 	13
+#define UNROLL 					5
 
 #endif
