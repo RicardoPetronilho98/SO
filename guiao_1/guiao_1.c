@@ -273,13 +273,11 @@ int destroy_buffer(struct buffer_t *buffer){
     return 0;
 }
 
-// por o perror caso a memoria do buffer seja insuficiente
+
 ssize_t readln_2(struct buffer_t *buffer, void **buf){
 
 	int i, lineSize = 0;
 	size_t n;
-
-	//if (buffer->lastLine == buffer->size + 1) return 0;
 
 	start:
 
@@ -290,7 +288,7 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 		n = read(buffer->field, (char*)buf + lineSize, buffer->size - lineSize); 
 
 	if (n == 0){ // caso para mandar parar
-
+		//return 0;
 	}
 
 	// deteta a posição do '\n' (para saber até onde se imprime a linha)
