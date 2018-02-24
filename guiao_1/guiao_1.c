@@ -319,6 +319,7 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 void exe_3_7(const char **argv){
 
 	p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); 
+
 	//size_t nbyte = KB * 10; // 10 KB
 	size_t nbyte = 6;
 	ssize_t n;

@@ -1,13 +1,13 @@
 #ifndef ASSINATURAS_H
 #define ASSINATURAS_H
 
-typedef struct buffer_t{
+typedef struct buffer_t{ // este estrutra ocupa 32 bytes na memória 
 
-	size_t size;  // dimensão do buffer
-	int field; 	  // ficheiro de leitura
-	int lastLine; // posição da ultima linha impressa
-	void *line;   // linha a ser impressa
-	void *buf;    // buffer principal com possibilidade de conter várias linhas de uma vez
+	size_t size;  // dimensão do buffer (8 bytes)
+	int field; 	  // ficheiro de leitura (4 bytes)
+	int lastLine; // posição da ultima linha impressa (4 bytes)
+	void *line;   // linha a ser impressa (8 bytes)
+	void *buf;    // buffer principal com possibilidade de conter várias linhas de uma vez (8 bytes)
 
 } *p_buffer_t;
 
