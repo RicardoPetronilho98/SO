@@ -279,6 +279,8 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	int i, lineSize = 0;
 	size_t n;
 
+	//if (buffer->lastLine == buffer->size + 1) return 0;
+
 	start:
 
 	/* caso o buffer estaja vazio (ou a sua informação esteja totalmente utilizada)
@@ -287,11 +289,13 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	if (buffer->lastLine == 0) 
 		n = read(buffer->field, (char*)buf + lineSize, buffer->size - lineSize); 
 
+	if (n == 0) return 0;
+
 	// deteta a posição do '\n' (para saber até onde se imprime a linha)
 	for (i = buffer->lastLine; *( (char*)buf + i) != '\n' && i < buffer->size; i++);
 
 	// se entrar neste if singifica que o buffer não tem memória para conter uma única linha
-	if (i == buffer->size && buffer->lastLine == 0){
+	if (i == buffer->size && buffer->lastLine == 0 && n > 0){
 		perror("Memoria reservada para o buffer insuficiente.\nNo mínimo o buffer tem de ter espaço para conter uma única linha.\nSugestão - reservar 10 KB ou mais para o buffer");
 		exit(30);
 	}
@@ -303,12 +307,12 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	   por isso, guarda o pedaço de linha atual (para não perder informação) e volta a ler mais
 	   buffer->size bytes para guardar a linha na sua totalidade
 	*/
-	if ( *( (char*)buf + i) != '\n' && i == buffer->size){
+	if ( *( (char*)buf + i) != '\n' && i == buffer->size && n > 0){
 		
 		lineSize--; // neste caso não é para incluir o '\n'
 		//perror("fim do buffer mas não encontrou uma nova linha");
 		// copiar o primeiro pedaço da linha para o inicio do buffer->line
-		strncpy((char*)buf, (char*)buf + buffer->lastLine, lineSize);
+		strncpy( (char*)buf, (char*)buf + buffer->lastLine, lineSize);
 		buffer->lastLine = 0;
 		goto start;
 	}
@@ -316,8 +320,8 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	// buffer->line aponta para o inicio da linha a ser impressa
 	buffer->line = (char*)buf + buffer->lastLine;
 
-	// atualiza o posição da nova linha (i + 1) para começar a seguir ao '\n' atual
-	buffer->lastLine += lineSize; 
+	// atualiza o posição da nova linha
+	buffer->lastLine += lineSize;
 
 	return lineSize; 
 }
@@ -344,13 +348,11 @@ void exe_3_8(int argc, const char **argv){
     
     p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); // pointer to buffer_t
     ssize_t n;
-    //size_t nbyte = KB * 10; // 10 KB
-    size_t nbyte = 30;
+    size_t nbyte = 10;
     int field = open(argv[1], O_RDONLY);   
     int len;
     int linha = 1;
     char *num = malloc( NUM_SIZE * sizeof(char) ); // string que contem o numero da linha
-    char newLine = '\n';
     char tab = 9;
 
     create_buffer(field, buffer, nbyte);
@@ -362,7 +364,7 @@ void exe_3_8(int argc, const char **argv){
 	    write(1, &tab, sizeof(char));
 	    write(1, num, len * sizeof(char)); //escreve essa string (nº da linha_1) no terminal
 	    write(1, buffer->line, n);
-	    write(1, &newLine, sizeof(char) );
+	    //write(1, &newLine, sizeof(char) );
 	    linha++;
     }
     
@@ -655,7 +657,7 @@ void exe_4_6(int argc, const char **argv){
 int main(int argc, const char **argv){	
 
 	int exe = 3;
-	int alinea = 7; 
+	int alinea = 8; 
 
 	int exemplo = 6; // exemplos contidos em /includes/exemplos.h
 
