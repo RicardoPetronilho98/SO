@@ -276,7 +276,7 @@ int destroy_buffer(struct buffer_t *buffer){
 // por o perror caso a memoria do buffer seja insuficiente
 ssize_t readln_2(struct buffer_t *buffer, void **buf){
 
-	int i = 0, lineSize;
+	int i, lineSize = 0;
 	size_t n;
 
 	start:
@@ -285,11 +285,11 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	   lê novamente - buffer->size - bytes de informação e coloca no buffer->buf
 	*/
 	if (buffer->lastLine == 0){
-		n = read(buffer->field, buf + i, buffer->size - i); 
+		n = read(buffer->field, (char*)buf + lineSize, buffer->size - lineSize); 
 	}
 
 	// deteta a posição do '\n' (para saber até onde se imprime a linha)
-	for (i = buffer->lastLine; ((char*)buf)[i] != '\n' && i < buffer->size; i++);
+	for (i = buffer->lastLine; *( (char*)buf + i) != '\n' && i < buffer->size; i++);
 
 	// se entrar neste if singifica que o buffer não tem memória para conter uma única linha
 	if (i == buffer->size && buffer->lastLine == 0){
@@ -298,14 +298,17 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	}
 
 	// dimensão da nova linha a ser impressa
-	lineSize = i - buffer->lastLine;
+	lineSize = i - buffer->lastLine + 1; // (+1) para incluir o '\n'
  
 	/* este if singifica que chegou ao fim do buffer mas não encontrou uma nova linha ('\n')
 	   por isso, guarda o pedaço de linha atual (para não perder informação) e volta a ler mais
 	   buffer->size bytes para guardar a linha na sua totalidade
 	*/
-	if ( ((char*)buf)[i] != '\n' && i == buffer->size){
+	if ( *( (char*)buf + i) != '\n' && i == buffer->size){
+		
+		lineSize--; // neste caso não é para incluir o '\n'
 		perror("fim do buffer mas não encontrou uma nova linha");
+		// copiar o primeiro pedaço da linha para o inicio do buffer->line
 		strncpy((char*)buf, (char*)buf + buffer->lastLine, lineSize);
 		buffer->lastLine = 0;
 		goto start;
@@ -315,11 +318,9 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	buffer->line = buf + buffer->lastLine;
 
 	// atualiza o posição da nova linha (i + 1) para começar a seguir ao '\n' atual
-	buffer->lastLine = i + 1; 
+	buffer->lastLine += lineSize; 
 
-	//if (buffer->lastLine == )
-
-	return lineSize;
+	return lineSize; 
 }
 
 
@@ -328,25 +329,24 @@ void exe_3_7(const char **argv){
 	p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); 
 
 	//size_t nbyte = KB * 10; // 10 KB
-	size_t nbyte = 5;
+	size_t nbyte = 10;
 	ssize_t n;
 	int field = open(argv[1], O_RDONLY, S_IRUSR);
-	char newLine = '\n';
+	//char newLine = '\n';
 	char num[12];
 	int debug;
 
 	create_buffer(field, buffer, nbyte);
 
-	debug = 2;
-	
+	debug = 3;
 	while(debug){ // para debugging
 
 		n = readln_2(buffer, buffer->buf);
 
 		write(1, buffer->line, n);
-		write(1, &newLine, sizeof(char) );
+		//write(1, &newLine, sizeof(char) );
 		sprintf(num, "%zd", n); 
-	    printf("Dimensao da linha = %zd\n", n); // para debugging
+	    printf("Dimensao da linha = %zd --------------------\n\n", n); // para debugging
 	    debug--;
 	}
 
