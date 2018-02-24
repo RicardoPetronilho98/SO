@@ -284,9 +284,8 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	/* caso o buffer estaja vazio (ou a sua informação esteja totalmente utilizada)
 	   lê novamente - buffer->size - bytes de informação e coloca no buffer->buf
 	*/
-	if (buffer->lastLine == 0){
+	if (buffer->lastLine == 0) 
 		n = read(buffer->field, (char*)buf + lineSize, buffer->size - lineSize); 
-	}
 
 	// deteta a posição do '\n' (para saber até onde se imprime a linha)
 	for (i = buffer->lastLine; *( (char*)buf + i) != '\n' && i < buffer->size; i++);
@@ -307,7 +306,7 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	if ( *( (char*)buf + i) != '\n' && i == buffer->size){
 		
 		lineSize--; // neste caso não é para incluir o '\n'
-		perror("fim do buffer mas não encontrou uma nova linha");
+		//perror("fim do buffer mas não encontrou uma nova linha");
 		// copiar o primeiro pedaço da linha para o inicio do buffer->line
 		strncpy((char*)buf, (char*)buf + buffer->lastLine, lineSize);
 		buffer->lastLine = 0;
@@ -315,7 +314,7 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	}
 
 	// buffer->line aponta para o inicio da linha a ser impressa
-	buffer->line = buf + buffer->lastLine;
+	buffer->line = (char*)buf + buffer->lastLine;
 
 	// atualiza o posição da nova linha (i + 1) para começar a seguir ao '\n' atual
 	buffer->lastLine += lineSize; 
@@ -329,7 +328,7 @@ void exe_3_7(const char **argv){
 	p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); 
 
 	//size_t nbyte = KB * 10; // 10 KB
-	size_t nbyte = 10;
+	size_t nbyte = 10 * KB;
 	ssize_t n;
 	int field = open(argv[1], O_RDONLY, S_IRUSR);
 	//char newLine = '\n';
@@ -338,15 +337,17 @@ void exe_3_7(const char **argv){
 
 	create_buffer(field, buffer, nbyte);
 
-	debug = 3;
+	debug = 23;
 	while(debug){ // para debugging
 
 		n = readln_2(buffer, buffer->buf);
 
+		if (!n) return;
+
 		write(1, buffer->line, n);
 		//write(1, &newLine, sizeof(char) );
 		sprintf(num, "%zd", n); 
-	    printf("Dimensao da linha = %zd --------------------\n\n", n); // para debugging
+	    //printf("Dimensao da linha = %zd --------------------\n\n", n); // para debugging
 	    debug--;
 	}
 
