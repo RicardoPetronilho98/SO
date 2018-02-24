@@ -276,39 +276,46 @@ int destroy_buffer(struct buffer_t *buffer){
 // por o perror caso a memoria do buffer seja insuficiente
 ssize_t readln_2(struct buffer_t *buffer, void **buf){
 
-	int i, lineSize;
+	int i = 0, lineSize;
 	size_t n;
 
+	start:
+
 	/* caso o buffer estaja vazio (ou a sua informação esteja totalmente utilizada)
-	   lê novamente buffer->size bytes de informação e coloca no buffer->buf
+	   lê novamente - buffer->size - bytes de informação e coloca no buffer->buf
 	*/
 	if (buffer->lastLine == 0){
-		n = read(buffer->field, buf, buffer->size); 
+		n = read(buffer->field, buf + i, buffer->size - i); 
 	}
 
 	// deteta a posição do '\n' (para saber até onde se imprime a linha)
-	for (i = buffer->lastLine; ((char*)buf)[i] != '\n' && i != buffer->size; i++);
+	for (i = buffer->lastLine; ((char*)buf)[i] != '\n' && i < buffer->size; i++);
 
 	// se entrar neste if singifica que o buffer não tem memória para conter uma única linha
 	if (i == buffer->size && buffer->lastLine == 0){
 		perror("Memoria reservada para o buffer insuficiente.\nNo mínimo o buffer tem de ter espaço para conter uma única linha.\nSugestão - reservar 10 KB ou mais para o buffer");
 		exit(30);
 	}
+
+	// dimensão da nova linha a ser impressa
+	lineSize = i - buffer->lastLine;
  
-	// singifica que chegou ao fim do buffer mas não encontrou uma nova linha ('\n')
+	/* este if singifica que chegou ao fim do buffer mas não encontrou uma nova linha ('\n')
+	   por isso, guarda o pedaço de linha atual (para não perder informação) e volta a ler mais
+	   buffer->size bytes para guardar a linha na sua totalidade
+	*/
 	if ( ((char*)buf)[i] != '\n' && i == buffer->size){
-		perror("fim do buffer sem NOVA LINHA encontrada");
-		exit(50);
+		perror("fim do buffer mas não encontrou uma nova linha");
+		strncpy((char*)buf, (char*)buf + buffer->lastLine, lineSize);
+		buffer->lastLine = 0;
+		goto start;
 	}
 
 	// buffer->line aponta para o inicio da linha a ser impressa
 	buffer->line = buf + buffer->lastLine;
-	
-	// dimensão da nova linha a ser impressa
-	lineSize = i - buffer->lastLine;
 
-	// atualiza o posição da nova linha
-	buffer->lastLine = i;
+	// atualiza o posição da nova linha (i + 1) para começar a seguir ao '\n' atual
+	buffer->lastLine = i + 1; 
 
 	//if (buffer->lastLine == )
 
@@ -321,7 +328,7 @@ void exe_3_7(const char **argv){
 	p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); 
 
 	//size_t nbyte = KB * 10; // 10 KB
-	size_t nbyte = 6;
+	size_t nbyte = 5;
 	ssize_t n;
 	int field = open(argv[1], O_RDONLY, S_IRUSR);
 	char newLine = '\n';
