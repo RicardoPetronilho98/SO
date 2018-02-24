@@ -289,7 +289,9 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 	if (buffer->lastLine == 0) 
 		n = read(buffer->field, (char*)buf + lineSize, buffer->size - lineSize); 
 
-	if (n == 0) return 0;
+	if (n == 0){ // caso para mandar parar
+
+	}
 
 	// deteta a posição do '\n' (para saber até onde se imprime a linha)
 	for (i = buffer->lastLine; *( (char*)buf + i) != '\n' && i < buffer->size; i++);
