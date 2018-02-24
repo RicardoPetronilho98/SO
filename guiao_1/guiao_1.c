@@ -326,30 +326,15 @@ ssize_t readln_2(struct buffer_t *buffer, void **buf){
 void exe_3_7(const char **argv){
 
 	p_buffer_t buffer = (p_buffer_t) malloc( sizeof(struct buffer_t) ); 
-
-	//size_t nbyte = KB * 10; // 10 KB
 	size_t nbyte = 10 * KB;
 	ssize_t n;
 	int field = open(argv[1], O_RDONLY, S_IRUSR);
-	//char newLine = '\n';
-	char num[12];
-	int debug;
 
 	create_buffer(field, buffer, nbyte);
 
-	debug = 23;
-	while(debug){ // para debugging
+	n = readln_2(buffer, buffer->buf);
 
-		n = readln_2(buffer, buffer->buf);
-
-		if (!n) return;
-
-		write(1, buffer->line, n);
-		//write(1, &newLine, sizeof(char) );
-		sprintf(num, "%zd", n); 
-	    //printf("Dimensao da linha = %zd --------------------\n\n", n); // para debugging
-	    debug--;
-	}
+	write(1, buffer->line, n);
 
 	destroy_buffer(buffer);
 }
