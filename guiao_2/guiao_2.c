@@ -8,7 +8,7 @@
 
 void printInt(int n){
 
-	char num[12]; // numero
+	char num[12]; // array que vai conter o inteiro
 	int len;
 	char newLine = '\n';
 
@@ -22,17 +22,19 @@ void printInt(int n){
 
 void exe_3_1(){
 
-	pid_t pid = getpid();
 	pid_t pai_pid = getppid();
-
+	//printInt(pai_pid);
+	printf("pid da bash = %d\n", pai_pid);
+	
+	/*
+	pid_t pid = getpid();
 	printInt(pid);
-	printInt(pai_pid);
+	*/
 }
 
 
 int main(){
 
 	exe_3_1();
-
 	return 0;
 }
