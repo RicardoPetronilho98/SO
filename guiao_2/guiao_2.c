@@ -177,6 +177,9 @@ void exe_3_3(){
 
 	    } else if (p == 0) { // só o filho vai imprimir
 	        
+	        printSysCall("processo: ");
+	        printInt(i + 1);
+
 	        pai_pid = getppid();
 			printSysCall("PID do meu pai = ");
 			printInt(pai_pid);
@@ -185,9 +188,16 @@ void exe_3_3(){
 			printSysCall("myPID = ");
 			printInt(pid);
 
+			printSysCall("\n");
+
 			_exit(i + 1);
 
-	    } else wait(&status);
+	    } else{ // caso seja o pai espera
+	    	
+	    	wait(&status);
+	    	printSysCall("my child exit code: ");
+	    	printInt( WEXITSTATUS(status) );
+	    }
 	}
 
 	printSysCall("\n");
