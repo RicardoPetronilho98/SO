@@ -8,7 +8,7 @@ clear:
 	clear
 
 clean: 
-	rm -r latex html hello.txt file.txt file2.txt file3.txt guiao_1 helloWorld.txt arrayA.txt 
+	rm -r latex html hello.txt file.txt file2.txt file3.txt guiao_2 helloWorld.txt arrayA.txt 
 
 doc:
 	doxygen
