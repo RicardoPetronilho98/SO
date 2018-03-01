@@ -41,10 +41,7 @@ void printSysCall(char *s){
 
 	int len;
 	for (len = 0; s[len]; len++);
-	char str[len];
-
-	strcpy(str, s);
-	write( 1, str, len * sizeof(char) );
+	write( 1, s, len * sizeof(char) );
 }
 
 
@@ -78,11 +75,30 @@ void exemplo_1(){
 
 
 /**
-\brief Criar um processo filho\n
+\brief Exercício 3.1 do guião 2\n
+	   Imprimir o identificador de processo e o do seu pai\n
+	   Deve-se utilizar o comando - ps - para confirmar os PIDs dos processos
+*/
+void exe_3_1(){
+
+	pid_t pai_pid = getppid();
+	printSysCall("PID do pai = ");
+	printInt(pai_pid);
+	
+	pid_t pid = getpid();
+	printSysCall("myPID = ");
+	printInt(pid);
+	getchar(); 
+}
+
+
+/**
+\brief Exercício 3.2 do guião 2\n
+	   Criar um processo filho\n
 	   Pai e filho imprimem o seu identificador de processo e o do seu pai\n
 	   O pai imprime o pid do seu filho e espera que o filho termine a sua execução
 */
-void exemplo_2(){
+void exe_3_2(){
 
 	char newLine = '\n';
 	pid_t p, w, pai_pid, pid;
@@ -139,21 +155,38 @@ void exemplo_2(){
 
 
 /**
-\brief Exercício 3.1 do guião 2\n
-	   Imprimir o identificador de processo e o do seu pai\n
-	   Deve-se utilizar o comando - ps - para confirmar os PIDs dos processos
+\brief Exercício 3.3 do guião 2\n
+	   Criar 10 processos filhos\n
+	   Processos filhos imprimem o seu identificador de processo e o do seu pai\n
+	   Processos filhos terminam a execução com código de saída igual ao seu número de ordem\n
+	   O pai imprime o código de saída de cada um dos seus filhos
 */
-void exe_3_1(){
+void exe_3_3(){
 
-	pid_t pai_pid = getppid();
-	printSysCall("PID do pai = ");
-	printInt(pai_pid);
+	int i, status;
+	pid_t p;
+
+	printSysCall("\nantes do fork() - apenas o pai executa esta parte\n\n");
 	
-	pid_t pid = getpid();
-	printSysCall("myPID = ");
-	printInt(pid);
-	getchar(); 
+	for(i = 0; i < 10; i++){
+	    
+	    if ( (p = fork()) == -1 ) { // aqui cria uma filho
+	    	
+	    	perror("fork error");
+	        exit(1);
+
+	    } else if (p == 0) { // só o filho vai imprimir
+	        
+	        printf("Child (%d): %d\n", i + 1, getpid());
+	        exit(i + 1); 
+
+	    } else wait(&status);
+	}
+
+	printSysCall("\n");
+
 }
+
 
 
 /**
@@ -162,8 +195,11 @@ void exe_3_1(){
 int main(){
 
 	//exe_3_1();
+	//exe_3_2();
+	exe_3_3();
+	
 	//exemplo_1();
-	exemplo_2();
+
 	return 0;
 }
 

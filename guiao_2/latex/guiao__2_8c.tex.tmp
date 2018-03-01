@@ -29,16 +29,24 @@ void \mbox{\hyperlink{guiao__2_8c_a52a94e1d3b7b02fceebc1d36b62369a7}{exemplo\+\_
 \begin{DoxyCompactList}\small\item\em Criar um processo filho~\newline
  Pai e filho imprimem o seu identificador de processo e o do seu pai~\newline
  O pai imprime o pid do seu filho. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{guiao__2_8c_ad5852f5c148ee3d25bdf4d89e1ca2a3a}\label{guiao__2_8c_ad5852f5c148ee3d25bdf4d89e1ca2a3a}} 
-void \mbox{\hyperlink{guiao__2_8c_ad5852f5c148ee3d25bdf4d89e1ca2a3a}{exemplo\+\_\+2}} ()
-\begin{DoxyCompactList}\small\item\em Criar um processo filho~\newline
- Pai e filho imprimem o seu identificador de processo e o do seu pai~\newline
- O pai imprime o pid do seu filho e espera que o filho termine a sua execução. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{guiao__2_8c_a4ccf66064a7e02ae2fc0dce2410b1abe}\label{guiao__2_8c_a4ccf66064a7e02ae2fc0dce2410b1abe}} 
 void \mbox{\hyperlink{guiao__2_8c_a4ccf66064a7e02ae2fc0dce2410b1abe}{exe\+\_\+3\+\_\+1}} ()
 \begin{DoxyCompactList}\small\item\em Exercício 3.\+1 do guião 2~\newline
  Imprimir o identificador de processo e o do seu pai~\newline
  Deve-\/se utilizar o comando -\/ ps -\/ para confirmar os P\+I\+Ds dos processos. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{guiao__2_8c_a5e5265b99be39c06f5d8562ccc4c00b5}\label{guiao__2_8c_a5e5265b99be39c06f5d8562ccc4c00b5}} 
+void \mbox{\hyperlink{guiao__2_8c_a5e5265b99be39c06f5d8562ccc4c00b5}{exe\+\_\+3\+\_\+2}} ()
+\begin{DoxyCompactList}\small\item\em Exercício 3.\+2 do guião 2~\newline
+ Criar um processo filho~\newline
+ Pai e filho imprimem o seu identificador de processo e o do seu pai~\newline
+ O pai imprime o pid do seu filho e espera que o filho termine a sua execução. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{guiao__2_8c_aebc9d8bac181f630923fd268d266379c}\label{guiao__2_8c_aebc9d8bac181f630923fd268d266379c}} 
+void \mbox{\hyperlink{guiao__2_8c_aebc9d8bac181f630923fd268d266379c}{exe\+\_\+3\+\_\+3}} ()
+\begin{DoxyCompactList}\small\item\em Exercício 3.\+3 do guião 2~\newline
+ Criar 10 processos filhos~\newline
+ Processos filhos imprimem o seu identificador de processo e o do seu pai~\newline
+ Processos filhos terminam a execução com código de saída igual ao seu número de ordem~\newline
+ O pai imprime o código de saída de cada um dos seus filhos. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{guiao__2_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{guiao__2_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
 int \mbox{\hyperlink{guiao__2_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
 \begin{DoxyCompactList}\small\item\em Executa alternativamente um dos exercícios pedidos no guiao 2. \end{DoxyCompactList}\end{DoxyCompactItemize}
