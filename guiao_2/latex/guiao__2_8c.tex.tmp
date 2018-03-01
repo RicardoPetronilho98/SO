@@ -8,17 +8,32 @@
 {\ttfamily \#include \char`\"{}guiao\+\_\+2.\+h\char`\"{}}\newline
 Diagrama de dependências de inclusão para guiao\+\_\+2.\+c\+:
 % FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{guiao__2_8c_aa8cecfc5c5c054d2875c03e77b7be15d}\label{guiao__2_8c_aa8cecfc5c5c054d2875c03e77b7be15d}} 
+\#define {\bfseries T\+R\+UE}~1
+\item 
+\mbox{\Hypertarget{guiao__2_8c_aa93f0eb578d23995850d61f7d61c55c1}\label{guiao__2_8c_aa93f0eb578d23995850d61f7d61c55c1}} 
+\#define {\bfseries F\+A\+L\+SE}~0
+\end{DoxyCompactItemize}
 \subsection*{Funções}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{guiao__2_8c_ab45357dd6ce05d838ed613a34a9b640f}{print\+Int}} (int n)
 \begin{DoxyCompactList}\small\item\em Escreve em S\+T\+D\+O\+U\+T\+\_\+\+F\+I\+L\+E\+NO (terminal) o inteiro n. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{guiao__2_8c_a5a2c777519d91c3e3497a6fefe36e089}{print\+Sys\+Call}} (char $\ast$s)
+\begin{DoxyCompactList}\small\item\em Escreve em S\+T\+D\+O\+U\+T\+\_\+\+F\+I\+L\+E\+NO (terminal) a string s. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{guiao__2_8c_a52a94e1d3b7b02fceebc1d36b62369a7}\label{guiao__2_8c_a52a94e1d3b7b02fceebc1d36b62369a7}} 
 void \mbox{\hyperlink{guiao__2_8c_a52a94e1d3b7b02fceebc1d36b62369a7}{exemplo\+\_\+1}} ()
 \begin{DoxyCompactList}\small\item\em Criar um processo filho~\newline
  Pai e filho imprimem o seu identificador de processo e o do seu pai~\newline
- O pai imprime o pid do seu filho~\newline
-. \end{DoxyCompactList}\item 
+ O pai imprime o pid do seu filho. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{guiao__2_8c_ad5852f5c148ee3d25bdf4d89e1ca2a3a}\label{guiao__2_8c_ad5852f5c148ee3d25bdf4d89e1ca2a3a}} 
+void \mbox{\hyperlink{guiao__2_8c_ad5852f5c148ee3d25bdf4d89e1ca2a3a}{exemplo\+\_\+2}} ()
+\begin{DoxyCompactList}\small\item\em Criar um processo filho~\newline
+ Pai e filho imprimem o seu identificador de processo e o do seu pai~\newline
+ O pai imprime o pid do seu filho e espera que o filho termine a sua execução. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{guiao__2_8c_a4ccf66064a7e02ae2fc0dce2410b1abe}\label{guiao__2_8c_a4ccf66064a7e02ae2fc0dce2410b1abe}} 
 void \mbox{\hyperlink{guiao__2_8c_a4ccf66064a7e02ae2fc0dce2410b1abe}{exe\+\_\+3\+\_\+1}} ()
 \begin{DoxyCompactList}\small\item\em Exercício 3.\+1 do guião 2~\newline
@@ -46,5 +61,20 @@ Escreve em S\+T\+D\+O\+U\+T\+\_\+\+F\+I\+L\+E\+NO (terminal) o inteiro n.
 
 \begin{DoxyParams}{Parâmetros}
 {\em n} & -\/ inteiro n \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{guiao__2_8c_a5a2c777519d91c3e3497a6fefe36e089}\label{guiao__2_8c_a5a2c777519d91c3e3497a6fefe36e089}} 
+\index{guiao\+\_\+2.\+c@{guiao\+\_\+2.\+c}!print\+Sys\+Call@{print\+Sys\+Call}}
+\index{print\+Sys\+Call@{print\+Sys\+Call}!guiao\+\_\+2.\+c@{guiao\+\_\+2.\+c}}
+\subsubsection{\texorpdfstring{print\+Sys\+Call()}{printSysCall()}}
+{\footnotesize\ttfamily void print\+Sys\+Call (\begin{DoxyParamCaption}\item[{char $\ast$}]{s }\end{DoxyParamCaption})}
+
+
+
+Escreve em S\+T\+D\+O\+U\+T\+\_\+\+F\+I\+L\+E\+NO (terminal) a string s. 
+
+
+\begin{DoxyParams}{Parâmetros}
+{\em s} & -\/ string s \\
 \hline
 \end{DoxyParams}

@@ -33,12 +33,18 @@ void printInt(int n){
 }
 
 
+/**
+\brief Escreve em STDOUT_FILENO (terminal) a string s
+@param s - string s
+*/
 void printSysCall(char *s){
 
-	char str[1024];
+	int len;
+	for (len = 0; s[len]; len++);
+	char str[len];
 
 	strcpy(str, s);
-	write( 1, str, strlen(str) );
+	write( 1, str, len * sizeof(char) );
 }
 
 
@@ -155,9 +161,9 @@ void exe_3_1(){
 */
 int main(){
 
-	exe_3_1();
+	//exe_3_1();
 	//exemplo_1();
-	//exemplo_2();
+	exemplo_2();
 	return 0;
 }
 
