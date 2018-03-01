@@ -92,15 +92,19 @@ void exemplo_2(){
 		_exit(p);
 	}
 
-	if (  p != 0 &&  (w = wait(&status)) == -1 ){
-	/* If wait() returns due to a stopped or terminated child process, the process ID of the child is
-	returned to the calling process.  Otherwise, a value of -1 is returned and errno is set to
-	indicate the error. */
+	if ( p != 0 ){ // (p != 0) ---> apenas o pai vai executar esta parte
+		
+		if ( (w = wait(&status)) == -1 ){
+		/* If wait() returns due to a stopped or terminated child process, the process ID of the child is
+		returned to the calling process.  Otherwise, a value of -1 is returned and errno is set to
+		indicate the error. */
 
-		perror("wait error");
-		_exit(w);
-
-	} else if ( p != 0 ) printf("wait return (child pid) = %d\n", w);
+			perror("wait error");
+			_exit(w);
+		} 
+		
+		else printf("wait return (child pid) = %d\n", w);
+	}
 
 	pai_pid = getppid();
 	strcpy(str, "PID do meu pai = ");
