@@ -164,7 +164,7 @@ void exe_3_2(){
 void exe_3_3(){
 
 	int i, status;
-	pid_t p;
+	pid_t p, pai_pid, pid;
 
 	printSysCall("\nantes do fork() - apenas o pai executa esta parte\n\n");
 	
@@ -173,12 +173,19 @@ void exe_3_3(){
 	    if ( (p = fork()) == -1 ) { // aqui cria uma filho
 	    	
 	    	perror("fork error");
-	        exit(1);
+	        exit(200);
 
 	    } else if (p == 0) { // só o filho vai imprimir
 	        
-	        printf("Child (%d): %d\n", i + 1, getpid());
-	        exit(i + 1); 
+	        pai_pid = getppid();
+			printSysCall("PID do meu pai = ");
+			printInt(pai_pid);
+
+			pid = getpid();
+			printSysCall("myPID = ");
+			printInt(pid);
+
+			_exit(i + 1);
 
 	    } else wait(&status);
 	}
