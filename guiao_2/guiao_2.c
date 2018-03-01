@@ -33,6 +33,15 @@ void printInt(int n){
 }
 
 
+void printSysCall(char *s){
+
+	char str[1024];
+
+	strcpy(str, s);
+	write( 1, str, strlen(str) );
+}
+
+
 /**
 \brief Criar um processo filho\n
 	   Pai e filho imprimem o seu identificador de processo e o do seu pai\n
@@ -40,27 +49,22 @@ void printInt(int n){
 */
 void exemplo_1(){
 
-	char str[1024];
 	char newLine = '\n';
 
-	strcpy(str, "antes do fork() - apenas o pai executa esta parte\n");
-	write( 1, str, strlen(str) );
-	write(1, &newLine, sizeof(char) );
+	printSysCall("\nantes do fork() - apenas o pai executa esta parte\n\n");
 
 	pid_t p = fork(); // criar um processo filho e devovle o seu pid
 	
 	pid_t pai_pid = getppid();
-	strcpy(str, "PID do meu pai = ");
-	write( 1, str, strlen(str) );
+	
+	printSysCall("PID do meu pai = ");
 	printInt(pai_pid);
 
 	pid_t pid = getpid();
-	strcpy(str, "myPID = ");
-	write( 1, str, strlen(str) );
+	printSysCall("myPID = ");
 	printInt(pid);
 
-	strcpy(str, "PID do meu filho = ");
-	write( 1, str, strlen(str) );
+	printSysCall("PID do meu filho = ");
 	printInt(p);
 
 	write(1, &newLine, sizeof(char) );
@@ -74,14 +78,11 @@ void exemplo_1(){
 */
 void exemplo_2(){
 
-	char str[1024];
 	char newLine = '\n';
 	pid_t p, w, pai_pid, pid;
 	int status;
 
-	strcpy(str, "antes do fork() - apenas o pai executa esta parte\n");
-	write( 1, str, strlen(str) );
-	write(1, &newLine, sizeof(char) );
+	printSysCall("\nantes do fork() - apenas o pai executa esta parte\n\n");
 
 	if ( (p = fork()) == -1 ){
 	/* Upon successful completion, fork() returns a value of 0 to the child process and returns the
@@ -104,25 +105,25 @@ void exemplo_2(){
 		} 
 
 		else{
-			printf("---------------------- Parent process ----------------------\n");
-			printf( "wait return (child pid) = %d\n", w );
-			printf( "child exit status = %d\n", WEXITSTATUS(status) );
+			
+			printSysCall("---------------------- Parent process ----------------------\n");
+			printSysCall( "wait return (child pid) = ");
+			printInt(w);
+			printSysCall( "child exit status = "); 
+			printInt( WEXITSTATUS(status) );
 		}
 	
-	} else printf("---------------------- Child process ----------------------\n");
+	} else printSysCall("---------------------- Child process ----------------------\n");
 
 	pai_pid = getppid();
-	strcpy(str, "PID do meu pai = ");
-	write( 1, str, strlen(str) );
+	printSysCall("PID do meu pai = ");
 	printInt(pai_pid);
 
 	pid = getpid();
-	strcpy(str, "myPID = ");
-	write( 1, str, strlen(str) );
+	printSysCall("myPID = ");
 	printInt(pid);
 
-	strcpy(str, "PID do meu filho = ");
-	write( 1, str, strlen(str) );
+	printSysCall("PID do meu filho = ");
 	printInt(p);
 
 	write(1, &newLine, sizeof(char) );
@@ -139,11 +140,11 @@ void exemplo_2(){
 void exe_3_1(){
 
 	pid_t pai_pid = getppid();
-	write( 1, "PID do pai = ", 14 * sizeof(char) );
+	printSysCall("PID do pai = ");
 	printInt(pai_pid);
 	
 	pid_t pid = getpid();
-	write( 1, "myPID = ", 8 * sizeof(char) );
+	printSysCall("myPID = ");
 	printInt(pid);
 	getchar(); 
 }
@@ -154,9 +155,9 @@ void exe_3_1(){
 */
 int main(){
 
-	//exe_3_1();
+	exe_3_1();
 	//exemplo_1();
-	exemplo_2();
+	//exemplo_2();
 	return 0;
 }
 
