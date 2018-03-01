@@ -102,9 +102,12 @@ void exemplo_2(){
 			perror("wait error");
 			_exit(w);
 		} 
-		
-		else printf("wait return (child pid) = %d\n", w);
-	}
+
+		else{
+			printf( "wait return (child pid) = %d\n", w );
+			printf( "child exit status = %d\n", WEXITSTATUS(status) );
+		}
+	} 
 
 	pai_pid = getppid();
 	strcpy(str, "PID do meu pai = ");
@@ -121,6 +124,8 @@ void exemplo_2(){
 	printInt(p);
 
 	write(1, &newLine, sizeof(char) );
+
+	if (p == 0) _exit(10);
 }
 
 
