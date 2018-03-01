@@ -93,7 +93,7 @@ void exemplo_2(){
 	}
 
 	if ( p != 0 ){ // (p != 0) ---> apenas o pai vai executar esta parte
-		
+
 		if ( (w = wait(&status)) == -1 ){
 		/* If wait() returns due to a stopped or terminated child process, the process ID of the child is
 		returned to the calling process.  Otherwise, a value of -1 is returned and errno is set to
@@ -104,10 +104,12 @@ void exemplo_2(){
 		} 
 
 		else{
+			printf("---------------------- Parent process ----------------------\n");
 			printf( "wait return (child pid) = %d\n", w );
 			printf( "child exit status = %d\n", WEXITSTATUS(status) );
 		}
-	} 
+	
+	} else printf("---------------------- Child process ----------------------\n");
 
 	pai_pid = getppid();
 	strcpy(str, "PID do meu pai = ");
