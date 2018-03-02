@@ -201,7 +201,62 @@ void exe_3_3(){
 	}
 
 	printSysCall("\n");
+}
 
+
+int forkSearch(int start, int end, int value, int *arr){
+
+	int i;
+
+	for (i = start; i < end; i++)
+		if (arr[i] == value)
+			return i;
+			
+	return -1;
+}
+
+
+void exe_3_4(){
+
+	int i;
+	int N = 1000;
+	int arr[N];
+	int value = 677;
+	for (i = 0; i < N; i++) arr[i] = i;
+	pid_t p;
+	int status;
+	int found;
+	
+	for(i = 0; i < 10; i++){
+	    
+	    if ( (p = fork()) == -1 ) { // aqui cria uma filho
+	    	
+	    	perror("fork error");
+	        exit(200);
+
+	    } else if (p == 0) { // caso seja o filho
+
+			found = forkSearch( i * (N / 10), i * (N / 10) + N / 10, value, arr);
+			printf("%d - %d\n", i * (N / 10), i * (N / 10) + N / 10);
+			if (found != -1){
+
+				printSysCall("Hit found in child process: ");
+				printInt( getpid() );
+				printSysCall("\n");
+				_exit(0); // retorna 0 caso tenha encontrado 
+			} 
+
+			_exit(i + 1);
+
+		} else { // caso seja o pai 
+
+			wait(&status);
+	    	printSysCall("my child exit code: ");
+	    	printInt( WEXITSTATUS(status) );
+
+	    	if ( WEXITSTATUS(status) == 0) break; // como encontrou para de procurar
+		} // else end
+	} // for end
 }
 
 
@@ -213,7 +268,8 @@ int main(){
 
 	//exe_3_1();
 	//exe_3_2();
-	exe_3_3();
+	//exe_3_3();
+	exe_3_4();
 	
 	//exemplo_1();
 
