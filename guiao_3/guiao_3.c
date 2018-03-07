@@ -53,7 +53,7 @@ void exe_3_5(int argc, char **argv){
 			_exit(1);
 		}
 
-		if (p == 0){ //
+		if (p == 0){ 
 
 			execlp(argv[i], "iuasiuhfiuashiuhu", (char*) NULL);
 			_exit(0);
@@ -65,12 +65,26 @@ void exe_3_5(int argc, char **argv){
 }
 
 
+void exe_3_6(const char *cmd){
+
+	int len = strlen(cmd);
+	char *r = malloc( sizeof(char) * len );
+	memcpy(r, cmd, len * sizeof(char) );
+
+	for (int i = 0; r[i]; i++) 
+		//TODO ...
+
+	printf("%s\n", r);
+}
+
+
 int main(int argc, char **argv){
 
 	//exe_3_1();
 	//exe_3_2();
 	//exe_3_4(argv);
-	exe_3_5(argc, argv);
+	//exe_3_5(argc, argv);
+	exe_3_6("ls -l");
 
 	return 0;
 }
