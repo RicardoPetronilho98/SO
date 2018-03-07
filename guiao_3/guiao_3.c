@@ -66,15 +66,33 @@ void exe_3_5(int argc, char **argv){
 
 
 void exe_3_6(const char *cmd){
-
+	
+	int i;
+	int v = 0;
+	int count = 1;
 	int len = strlen(cmd);
 	char *r = malloc( sizeof(char) * len );
 	memcpy(r, cmd, len * sizeof(char) );
+	
+	for(i = 0; r[i]; i++) 
+		if (r[i] == ' ') 
+			count++;
 
-	for (int i = 0; r[i]; i++) 
-		//TODO ...
+	char **strList = malloc( sizeof(char*) * count);
+	strList[v++] = r;
 
-	printf("%s\n", r);
+	for (i = 0; r[i]; i++){
+		
+		if (r[i] == ' '){
+			r[i] = '\0'; // sem esta linha cada apontador mostrava a string toda desde o inicio
+			strList[v++] = r + i + 1; 
+		}
+	}
+
+	printf("strList[0] = %s\n", strList[0]);
+	printf("strList[1] = %s\n", strList[1]);
+
+	execvp(strList[0], strList);
 }
 
 
