@@ -167,8 +167,11 @@ void exe_3_7(){
 		// ctrl-D ou exit
 		if ( n <= 0 || (n == 5 && memcmp("exit", buf, 4 * sizeof(char)) == 0) ){ 
 			
-			char *str = "[Process completed]\nI hope I see you soon! - program ended by user\n";
+			char *str = "\n[Process completed]\nI hope I see you soon! - program ended by ";
 			write( 1, str, sizeof(char) * strlen(str) );
+			char *str2 = getlogin();
+			write(1, str2, strlen(str2) * sizeof(char));
+			write(1, "\n\n", 2 * sizeof(char));
 			_exit(0);
 		}
 
