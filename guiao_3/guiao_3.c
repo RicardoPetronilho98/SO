@@ -116,10 +116,11 @@ char* getShortPath(const char *path){
 	return shortPath;
 }
 
+
 void printBashLogo(){
 
 	char *currentPath = malloc (KB);
-	char *bashLogo1 = "my-bash:";
+	char *bashLogo1 = "SO_É_FIXE:";
 	write(1, bashLogo1, strlen(bashLogo1) * sizeof(char));
 	char *bashLogo2 = getShortPath( getcwd(currentPath, KB) );
 	write(1, bashLogo2, strlen(bashLogo2) * sizeof(char));
@@ -130,12 +131,32 @@ void printBashLogo(){
 }
 
 
+void printWelcomeMessage(){
+
+	write(1, "\n", sizeof(char));
+	char *underscore = "---------------------------------------------------------------------\n";
+	write(1, underscore, strlen(underscore) * sizeof(char));
+	char *welcome1 = "                       Hello ";
+	write(1, welcome1, strlen(welcome1) * sizeof(char));
+	char *welcome2 = getlogin();
+	write(1, welcome2, strlen(welcome2) * sizeof(char));
+	char *welcome4 = "\n                      this is your new bash now\n";
+	write(1, welcome4, strlen(welcome4) * sizeof(char));
+	char *welcome5 = "                        I'm watching you <3 :)\n";
+	write(1, welcome5, strlen(welcome5) * sizeof(char));
+	write(1, underscore, strlen(underscore) * sizeof(char));
+	write(1, "\n", sizeof(char));
+}
+
+
 void exe_3_7(){
 
 	void *buf = malloc( KB ); // 1 KB para o buffer
 	ssize_t n;
 	pid_t p;
 	int status;
+
+	printWelcomeMessage();
 
 	while(1){
 		
