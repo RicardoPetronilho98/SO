@@ -120,6 +120,7 @@ void exe_3_7(){
 		*( (char*) buf + n - 1) = '\0';
 
 		/*
+		man 3 exec
 		The exec family of functions replaces the current process image with a new process image.
 		
 		nota IMPORTANTE:
