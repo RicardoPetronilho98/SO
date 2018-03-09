@@ -102,7 +102,9 @@ int main(int argc, char **argv){
 	//exe_3_2();
 	//exe_3_4(argv);
 	//exe_3_5(argc, argv);
-	exe_3_6("");
+	exe_3_6("ls -l");
+
+	// para correr o programa --> make && ./guiao_3
 
 	return 0;
 }
