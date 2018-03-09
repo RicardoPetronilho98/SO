@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define KB		1024
 
 void exe_3_1(){
 
@@ -82,20 +83,69 @@ void exe_3_6(const char *cmd){
 	strList[v++] = r;
 	strList[count - 1] = (char*) NULL;
 
-	for (i = 0; r[i]; i++){
-		
+	for (i = 0; r[i]; i++)
 		if (r[i] == ' '){
 			r[i] = '\0'; // sem esta linha cada apontador mostrava a string toda desde o inicio
 			strList[v++] = r + i + 1; 
 		}
-	}
 
-	/* para debug: 
-	for (i = 0; i < count; i++)
-		printf("strList[%d] = %s\n", i, strList[i]);
-	*/
+	// para debug: 
+	// for (i = 0; i < count; i++)
+	// 	printf("strList[%d] = %s\n", i, strList[i]);
 	
 	execvp(strList[0], strList);
+}
+
+
+void exe_3_7(){
+
+	void *buf = malloc( KB ); // 1 KB para o buffer
+	ssize_t n;
+	pid_t p;
+	int status;
+
+	while(1){
+
+		n = read(0, buf, KB);
+
+		// ctrl-D ou exit
+		if ( n <= 0 || (n == 5 && memcmp("exit", buf, 4 * sizeof(char)) == 0) ){ 
+			
+			char *str = "[Process completed]\nI hope I see you soon! - program ended by user\n";
+			write( 1, str, sizeof(char) * strlen(str) );
+			_exit(0);
+		}
+
+		// remover o '\n' no fim
+		*( (char*) buf + n - 1) = '\0';
+
+		/*
+		The exec family of functions replaces the current process image with a new process image.
+		
+		nota IMPORTANTE:
+
+		como as funções exec() substituem o processo atual pelo novo,
+		temos de criar um processo filho, evocar a exec() nesse processo 
+		caso contrário perdiamos o executável atual e o programa acabava
+		*/
+
+		if ( (p = fork()) == -1){
+
+			perror("fork error");
+			_exit(1);
+		}
+
+		if (p == 0){ 
+
+			exe_3_6( (const char*) buf );
+			_exit(0);
+		}
+
+		else{ 
+			// o pai (o interpretador) espera pelo fim da execução do comando atual
+			wait(&status);
+		}
+	}
 }
 
 
@@ -105,9 +155,37 @@ int main(int argc, char **argv){
 	//exe_3_2();
 	//exe_3_4(argv);
 	//exe_3_5(argc, argv);
-	exe_3_6("ls -l");
+	//exe_3_6("ls -l");
+	exe_3_7();
 
 	// para correr o programa --> make && ./guiao_3
 
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
