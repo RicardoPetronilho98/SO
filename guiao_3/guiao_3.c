@@ -102,7 +102,7 @@ int main(int argc, char **argv){
 	//exe_3_2();
 	//exe_3_4(argv);
 	//exe_3_5(argc, argv);
-	exe_3_6("ls -l");
+	exe_3_6("");
 
 	return 0;
 }
