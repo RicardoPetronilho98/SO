@@ -67,19 +67,19 @@ void exe_3_5(int argc, char **argv){
 
 void exe_3_6(const char *cmd){
 	
-	int i;
-	int v = 0;
-	int count = 1;
+	int i, v = 0, count = 2;
+	
 	int len = strlen(cmd);
 	char *r = malloc( sizeof(char) * len );
-	memcpy(r, cmd, len * sizeof(char) );
+	memcpy(r, cmd, len * sizeof(char) ); 
 	
-	for(i = 0; r[i]; i++) 
+	for(i = 0; r[i]; i++) // contador do número de comandos e/ou argumentos dados
 		if (r[i] == ' ') 
 			count++;
 
 	char **strList = malloc( sizeof(char*) * count);
 	strList[v++] = r;
+	strList[count - 1] = (char*) NULL;
 
 	for (i = 0; r[i]; i++){
 		
@@ -89,9 +89,9 @@ void exe_3_6(const char *cmd){
 		}
 	}
 
-	printf("strList[0] = %s\n", strList[0]);
-	printf("strList[1] = %s\n", strList[1]);
-
+	/*for (i = 0; i < count; i++)
+		printf("strList[%d] = %s\n", i, strList[i]);*/
+	
 	execvp(strList[0], strList);
 }
 
