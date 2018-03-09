@@ -97,6 +97,39 @@ void exe_3_6(const char *cmd){
 }
 
 
+char* getShortPath(const char *path){
+
+	int i, r, len;
+
+	for(len = i = 0; path[i]; i++, len++){
+		if (path[i] == '/'){
+			r = i;
+			len = 0;
+		}
+	}
+
+	r++;
+
+	char *shortPath = malloc( sizeof(char) * len);
+	memcpy(shortPath, path + r, len * sizeof(char) );
+
+	return shortPath;
+}
+
+void printBashLogo(){
+
+	char *currentPath = malloc (KB);
+	char *bashLogo1 = "my-bash:";
+	write(1, bashLogo1, strlen(bashLogo1) * sizeof(char));
+	char *bashLogo2 = getShortPath( getcwd(currentPath, KB) );
+	write(1, bashLogo2, strlen(bashLogo2) * sizeof(char));
+	write(1, " ", sizeof(char));
+	char *bashLogo3 = getlogin();
+	write(1, bashLogo3, strlen(bashLogo3) * sizeof(char));
+	write(1, "$ ", 2 * sizeof(char));
+}
+
+
 void exe_3_7(){
 
 	void *buf = malloc( KB ); // 1 KB para o buffer
@@ -105,6 +138,8 @@ void exe_3_7(){
 	int status;
 
 	while(1){
+		
+		printBashLogo();
 
 		n = read(0, buf, KB);
 
