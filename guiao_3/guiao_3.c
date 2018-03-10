@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
 
 #define KB		1024
 
@@ -159,7 +160,7 @@ void exe_3_7(){
 	printWelcomeMessage();
 
 	while(1){
-		
+
 		printBashLogo();
 
 		n = read(0, buf, KB);
@@ -195,7 +196,7 @@ void exe_3_7(){
 			_exit(1);
 		}
 
-		if (p == 0){ 
+		if (p == 0){
 
 			exe_3_6( (const char*) buf );
 			_exit(0);
@@ -215,8 +216,8 @@ int main(int argc, char **argv){
 	//exe_3_2();
 	//exe_3_4(argv);
 	//exe_3_5(argc, argv);
-	//exe_3_6("ls -l");
-	exe_3_7();
+	//exe_3_6("cd ..");
+	//exe_3_7();
 
 	// para correr o programa --> make && ./guiao_3
 
