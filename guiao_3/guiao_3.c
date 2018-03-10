@@ -217,7 +217,7 @@ int main(int argc, char **argv){
 	//exe_3_4(argv);
 	//exe_3_5(argc, argv);
 	//exe_3_6("cd ..");
-	//exe_3_7();
+	exe_3_7();
 
 	// para correr o programa --> make && ./guiao_3
 
